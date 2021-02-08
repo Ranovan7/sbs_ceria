@@ -7,7 +7,7 @@ router = APIRouter(
     prefix="",
     tags=["main"],
     # dependencies=[Depends(get_token_header)],
-    responses={404: {'detail': "Not Found"}},
+    responses={404: {"description": "Not found"}},
 )
 
 
