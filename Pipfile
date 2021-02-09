@@ -11,6 +11,9 @@ aiofiles = "*"
 uvicorn = "*"
 python-dotenv = "*"
 jinja2 = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
+python-multipart = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
 
 [dev-packages]
 
