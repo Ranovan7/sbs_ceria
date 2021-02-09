@@ -20,12 +20,7 @@ def index(request: Request, user=Depends(current_user)):
         return RedirectResponse("/login")
 
     text = "Hello, World!"
-    return templates.TemplateResponse("index.html", {"request": request, 'text': text})
-
-
-@router.get("/example")
-def example(request: Request, text: str = None):
-    return templates.TemplateResponse("index.html", {"request": request, 'text': text or 'Example'})
+    return templates.TemplateResponse("main/index.html", {"request": request, 'user': user})
 
 
 @router.get("/login")

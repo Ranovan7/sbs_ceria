@@ -14,12 +14,12 @@ router = APIRouter(
 
 
 @router.get("/")
-def get_users(request: Request, db: Session = Depends(db_session), admin=Depends(admin_only)):
-    if not admin:
+def get_users(request: Request, db: Session = Depends(db_session), user=Depends(admin_only)):
+    if not user:
         return RedirectResponse("/login")
 
     users = db.query(User).all()
-    return templates.TemplateResponse("users/index.html", {"request": request, "admin": admin, 'users': users})
+    return templates.TemplateResponse("users/index.html", {"request": request, "user": user, 'users': users})
 
 
 @router.post("/")

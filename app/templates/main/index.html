@@ -11,7 +11,8 @@
 
 {% block content %}
   <div class="">
-    <h3 class="subtitle">Only Admin can Access this page ({{ user.username }} - Role {{ user.role }})</h3>
+    <h1 class="title">Home Page</h1>
+    <h3 class="subtitle">Current User : {{ user.username }} - Role {{ user.role }}</h3>
   </div>
 {% endblock %}
 

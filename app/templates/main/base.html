@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <!-- <title>
+      {% if title %}
+        {{title}} | SBSehati
+      {% else %}
+        SBSehati
+      {% endif %}
+    </title> -->
+
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="/static/css/bulma.min.css">
+
+    {% block css %}{% endblock %}
+  </head>
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'main/navbar.html' %}
+
+      <div class="container" id="content-wrapper">
+        <div class="">
+
+            {% block content %}{% endblock %}
+        </div>
+      </div>
+    </div>
+    {% block js %}{% endblock %}
+  </body>
+</html>
