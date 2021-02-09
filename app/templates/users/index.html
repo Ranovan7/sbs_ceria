@@ -10,8 +10,40 @@
 {% endblock %}
 
 {% block content %}
-  <div class="">
-    <h3 class="subtitle">Only Admin can Access this page ({{ user.username }} - Role {{ user.role }})</h3>
+  <div>
+    <h1 class="title">
+      Users
+      <small><a href="#"><i class="fas fa-plus"></i></a></small>
+    </h1>
+    <div class="container">
+      <table class="table is-bordered">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for us in users %}
+          <tr>
+            <td>{{ us.username }}</td>
+            <td>{{ us.role_tag }}</td>
+            <td>
+              <small>
+                <a href="#">
+                  <span class="fa-passwd-reset fa-stack">
+                    <i class="fa fa-undo fa-stack-2x"></i>
+                    <i class="fa fa-lock fa-stack-1x"></i>
+                  </span>
+                </a>
+            </small>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
 
