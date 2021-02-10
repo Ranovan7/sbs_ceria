@@ -47,12 +47,16 @@ def current_user(token: str = Cookie(None), db: Session = Depends(db_session)):
     if not token:
         return None
     else:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("username")
-        if username is None:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            username: str = payload.get("username")
+            if username is None:
+                return None
+            user = db.query(User).filter(User.username == username).first()
+            return user
+        except Exception as e:
+            print(f"Error while reading token payload: {e}")
             return None
-        user = db.query(User).filter(User.username == username).first()
-        return user
 
 
 def admin_only(user=Depends(current_user)):

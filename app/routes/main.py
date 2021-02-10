@@ -35,7 +35,14 @@ def example(response: Response, form_data: OAuth2PasswordRequestForm = Depends()
     if not user and not user.verify_password(form_data.password):
         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
     else:
-        token = "randomtoken"
         response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
         response.set_cookie(key="token", value=user.create_access_token())
         return response
+
+
+@router.get("/logout")
+def example(response: Response):
+    token = "not-logged-in"
+    response = RedirectResponse("/")
+    response.set_cookie(key="token", value=token)
+    return response
