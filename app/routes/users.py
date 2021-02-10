@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Depends, Form
+from fastapi import APIRouter, Request, Depends, Form, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
 from app import templates, db_session, admin_only
@@ -14,16 +14,19 @@ router = APIRouter(
 
 
 @router.get("/")
-def get_users(request: Request, db: Session = Depends(db_session), user=Depends(admin_only)):
+def get_users(request: Request, user = Depends(admin_only), db: Session = Depends(db_session)):
     if not user:
         return RedirectResponse("/login")
 
-    users = db.query(User).all()
+    users = db.query(User).order_by(User.id).all()
     return templates.TemplateResponse("users/index.html", {"request": request, "user": user, 'users': users})
 
 
 @router.post("/")
-def create_user(user_form: CreateUser, user=Depends(admin_only)):
+def create_user(user_form: CreateUser = Depends(CreateUser.as_form), user=Depends(admin_only), db = Depends(db_session)):
+    if not user:
+        return RedirectResponse(f"/", status_code=status.HTTP_303_SEE_OTHER)
+
     user = User(
         username=user_form.username,
         role=user_form.role
@@ -32,18 +35,18 @@ def create_user(user_form: CreateUser, user=Depends(admin_only)):
 
     db.add(user)
     db.commit()
-    return RedirectResponse("/users")
+    return RedirectResponse("/users", status_code=status.HTTP_303_SEE_OTHER)
 
 
-@router.get("/<user_id>")
-def get_user(request: Request, user_id: int, user=Depends(admin_only)):
-    user = db.query(User).filter(User.id == user_id).all()
-    return templates.TemplateResponse("index.html", {"request": request, 'text': text or 'Example'})
+@router.post("/{user_id}/password")
+def change_password(user_id: int, password: str = Form(...), password2: str = Form(...), db: Session = Depends(db_session), user = Depends(admin_only)):
+    if not user:
+        return RedirectResponse(f"/", status_code=status.HTTP_303_SEE_OTHER)
 
-
-@router.post("/<user_id>/password")
-def change_password(user_id: int, password: str = Form(...), db: Session = Depends(db_session), user = Depends(admin_only)):
-    user = db.query(User).filter(User.id == user_id).all()
-    user.set_password(password)
+    print("Changing Password")
+    if password != password2:
+        return RedirectResponse(f"/users", status_code=status.HTTP_303_SEE_OTHER)
+    _user = db.query(User).get(user_id)
+    _user.set_password(password)
     db.commit()
-    return RedirectResponse(f"/users/{user_id}")
+    return RedirectResponse(f"/users", status_code=status.HTTP_303_SEE_OTHER)

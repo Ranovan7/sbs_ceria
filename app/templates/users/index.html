@@ -11,10 +11,52 @@
 
 {% block content %}
   <div>
-    <h1 class="title">
-      Users
-      <small><a href="#"><i class="fas fa-plus"></i></a></small>
-    </h1>
+    <div class="container">
+      <h1 class="title">
+        Users
+        <small>
+          <a href="#" onclick="toggle_modal('create-user')">
+            <i class="fa fa-sm fa-plus"></i>
+          </a>
+        </small>
+      </h1>
+      <div class="modal" id="create-user">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <form action="/users" method="post">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Tambah User</p>
+              <button class="delete" type="button" aria-label="close" onclick="toggle_modal('create-user')"></button>
+            </header>
+            <section class="modal-card-body">
+              <div class="pt-2 pb-2">
+                <label class="label" for="username">Username</label>
+                <input class="input is-link" type="text" name="username" value="">
+              </div>
+              <div class="pt-2 pb-2">
+                <label class="label" for="password">Password</label>
+                <input class="input is-link" type="password" name="password" value="">
+              </div>
+              <div class="pt-2 pb-2">
+                <label class="label" for="password">Tugas</label>
+                <div class="select is-link">
+                  <select name="role">
+                    <option value="2" selected>Sales</option>
+                    <option value="3">Gudang</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="pl-2 pr-2">
+                <input class="button is-link" type="submit" value="Tambah">
+              </div>
+              <button class="button" type="button" onclick="toggle_modal('create-user')">Batal</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+    </div>
     <div class="container">
       <table class="table is-bordered">
         <thead>
@@ -31,7 +73,7 @@
             <td>{{ us.role_tag }}</td>
             <td>
               <small>
-                <a href="#">
+                <a href="#" onclick="toggle_password({{ us.id }})">
                   <span class="fa-passwd-reset fa-stack">
                     <i class="fa fa-undo fa-stack-2x"></i>
                     <i class="fa fa-lock fa-stack-1x"></i>
@@ -43,12 +85,59 @@
           {% endfor %}
         </tbody>
       </table>
+      <div class="modal" id="change-password">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <form id="change_password" action="/users" method="post">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Tambah User</p>
+              <button class="delete" type="button" aria-label="close" onclick="toggle_password(0)"></button>
+            </header>
+            <section class="modal-card-body">
+              <div class="pt-2 pb-2">
+                <label class="label" for="password">Password Baru</label>
+                <input class="input is-link" type="password" name="password" value="">
+              </div>
+              <div class="pt-2 pb-2">
+                <label class="label" for="password">Ulang Password</label>
+                <input class="input is-link" type="password" name="password2" value="">
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="pl-2 pr-2">
+                <input class="button is-link" type="submit" value="Ubah">
+              </div>
+              <button class="button" type="button" onclick="toggle_password(0)">Batal</button>
+            </footer>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
 
 {% block js %}
 <script>
-
+  function toggle_modal(id) {
+    var element = document.getElementById(id);
+    if (element.classList.contains('is-active')) {
+      element.classList.remove("is-active");
+      element.classList.remove("is-clipped");
+    } else {
+      element.classList.add("is-active");
+      element.classList.add("is-clipped");
+    }
+  }
+  function toggle_password(user_id) {
+    var element = document.getElementById("change-password");
+    if (user_id == 0) {
+      element.classList.remove("is-active");
+      element.classList.remove("is-clipped");
+    } else {
+      element.classList.add("is-active");
+      element.classList.add("is-clipped");
+      document.getElementById('change_password').action = "/users/" + user_id + "/password"
+    }
+  }
 </script>
 {% endblock %}
