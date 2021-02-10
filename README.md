@@ -4,6 +4,8 @@
     - create .venv directory
     - run
     <br/>`# pipenv install`
+    - create SECRET_KEY using
+    <br/>`# openssl rand -hex 32`
     - duplicate .env-template to .env
 
 2. Create Database and Admin
