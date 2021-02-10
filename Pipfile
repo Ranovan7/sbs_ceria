@@ -15,6 +15,7 @@ passlib = {extras = ["bcrypt"], version = "*"}
 python-multipart = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
 typer = "*"
+gunicorn = "*"
 
 [dev-packages]
 
