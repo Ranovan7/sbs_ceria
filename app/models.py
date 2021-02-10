@@ -20,9 +20,9 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(30), unique=True)
-    password = Column(Text)
-    role = Column(Integer)
+    username = Column(String(30), unique=True, nullable=False)
+    password = Column(Text, nullable=False)
+    role = Column(Integer, nullable=False)
 
     @property
     def role_tag(self):
