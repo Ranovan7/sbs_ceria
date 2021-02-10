@@ -14,6 +14,7 @@ jinja2 = "*"
 passlib = {extras = ["bcrypt"], version = "*"}
 python-multipart = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
+typer = "*"
 
 [dev-packages]
 
