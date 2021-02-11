@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Request, Depends, Form, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
-from app import templates, db_session, admin_only
+from app import templates
 from app.models import User
 from app.schemas import CreateUser
+from app.utils import db_session, current_user, admin_only
 
 router = APIRouter(
     prefix="/users",
@@ -13,20 +14,14 @@ router = APIRouter(
 )
 
 
-@router.get("/")
-def get_users(request: Request, user = Depends(admin_only), db: Session = Depends(db_session)):
-    if not user:
-        return RedirectResponse("/login")
-
+@router.get("/", dependencies=[Depends(admin_only)])
+async def get_users(request: Request, user = Depends(current_user), db: Session = Depends(db_session)):
     users = db.query(User).order_by(User.id).all()
     return templates.TemplateResponse("users/index.html", {"request": request, "user": user, 'users': users})
 
 
-@router.post("/")
-def create_user(user_form: CreateUser = Depends(CreateUser.as_form), user=Depends(admin_only), db = Depends(db_session)):
-    if not user:
-        return RedirectResponse(f"/", status_code=status.HTTP_303_SEE_OTHER)
-
+@router.post("/", dependencies=[Depends(admin_only)])
+async def create_user(user_form: CreateUser = Depends(CreateUser.as_form), user=Depends(current_user), db = Depends(db_session)):
     user = User(
         username=user_form.username,
         role=user_form.role
@@ -38,11 +33,8 @@ def create_user(user_form: CreateUser = Depends(CreateUser.as_form), user=Depend
     return RedirectResponse("/users", status_code=status.HTTP_303_SEE_OTHER)
 
 
-@router.post("/{user_id}/password")
-def change_password(user_id: int, password: str = Form(...), password2: str = Form(...), db: Session = Depends(db_session), user = Depends(admin_only)):
-    if not user:
-        return RedirectResponse(f"/", status_code=status.HTTP_303_SEE_OTHER)
-
+@router.post("/{user_id}/password", dependencies=[Depends(admin_only)])
+async def change_password(user_id: int, password: str = Form(...), password2: str = Form(...), db: Session = Depends(db_session), user = Depends(current_user)):
     print("Changing Password")
     if password != password2:
         return RedirectResponse(f"/users", status_code=status.HTTP_303_SEE_OTHER)
