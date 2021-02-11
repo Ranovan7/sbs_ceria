@@ -11,12 +11,14 @@ from app import SECRET_KEY, ALGORITHM
 from app.models import User
 
 
-# Workers
+### Workers ###
 class MyUvicornWorker(UvicornWorker):
     CONFIG_KWARGS = {"loop": "auto", "http": "auto"}
 
 
-# Exceptions
+### Workers Enc ###
+
+### Exceptions ###
 class NotLoggedInException(Exception):
     def __init__(self, name: str = "NotLoggedInException"):
         self.name = name
@@ -29,15 +31,19 @@ class NotAllowedException(Exception):
 
 @app.exception_handler(NotLoggedInException)
 async def not_logged_in_exception_handler(request: Request, exc: NotLoggedInException):
-    return RedirectResponse("/login")
+    params = "message_text=Please Login to Access the Page"
+    params += "&message_type=danger"
+    return RedirectResponse(f"/login?{params}")
 
 
 @app.exception_handler(NotAllowedException)
 async def not_allowed_exception_handler(request: Request, exc: NotAllowedException):
-    return RedirectResponse("/")
+    return RedirectResponse("/forbidden")
 
 
-# Dependencies
+### Exceptions End ###
+
+### Dependencies ###
 def db_session():
     db = SessionLocal()
     try:
@@ -78,3 +84,6 @@ class RoleChecker:
 
 login_required = RoleChecker()
 admin_only = RoleChecker(['admin'])
+
+
+### Dependencies End ###

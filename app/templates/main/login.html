@@ -8,6 +8,15 @@
   </head>
   <body>
   <section class="section">
+    <div class="container">
+      {% if message_text %}
+        <div id="message" class="notification is-{{ message_type }}">
+          <button class="delete" onclick="document.getElementById('message').style.display = 'none'"></button>
+          {{ message_text }}
+        </div>
+        <br>
+      {% endif %}
+    </div>
     <div class="columns">
       <div class="column">
 

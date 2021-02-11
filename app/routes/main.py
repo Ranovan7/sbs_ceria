@@ -21,8 +21,11 @@ async def index(request: Request, user=Depends(current_user)):
 
 
 @router.get("/login")
-async def login_get(request: Request, text: str = None):
-    return templates.TemplateResponse("main/login.html", {"request": request})
+async def login_get(request: Request, message_text: str = None, message_type: str = None):
+    return templates.TemplateResponse("main/login.html", {
+        "request": request,
+        "message_text": message_text,
+        "message_type": message_type})
 
 
 @router.post("/login")
@@ -42,7 +45,15 @@ async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = 
 
 @router.get("/logout", dependencies=[Depends(login_required)])
 async def logout(response: Response):
+    params = "message_text=Logout Sukses"
+    params += "&message_type=info"
+    response = RedirectResponse(f"/login?{params}")
+
     token = "not-logged-in"
-    response = RedirectResponse("/")
     response.set_cookie(key="token", value=token)
     return response
+
+
+@router.get("/forbidden")
+async def forbidden(request: Request):
+    return templates.TemplateResponse("errors/403.html", {"request": request})
