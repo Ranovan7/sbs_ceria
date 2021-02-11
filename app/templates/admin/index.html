@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 
-{% set title = "Users Index" %}
+{% set title = "Admin" %}
 
 {% block css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
@@ -23,7 +23,7 @@
       <div class="modal" id="create-user">
         <div class="modal-background"></div>
         <div class="modal-card">
-          <form action="/users" method="post">
+          <form action="/admin/users" method="post">
             <header class="modal-card-head">
               <p class="modal-card-title">Tambah User</p>
               <button class="delete" type="button" aria-label="close" onclick="toggle_modal('create-user')"></button>
@@ -88,7 +88,7 @@
       <div class="modal" id="change-password">
         <div class="modal-background"></div>
         <div class="modal-card">
-          <form id="change_password" action="/users" method="post">
+          <form id="change_password" action="/admin/users" method="post">
             <header class="modal-card-head">
               <p class="modal-card-title">Tambah User</p>
               <button class="delete" type="button" aria-label="close" onclick="toggle_password(0)"></button>
@@ -136,7 +136,7 @@
     } else {
       element.classList.add("is-active");
       element.classList.add("is-clipped");
-      document.getElementById('change_password').action = "/users/" + user_id + "/password"
+      document.getElementById('change_password').action = "/admin/users/" + user_id + "/password"
     }
   }
 </script>

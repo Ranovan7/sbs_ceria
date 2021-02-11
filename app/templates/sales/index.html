@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+
+{% set title = "Sales" %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <div>
+    <div class="container">
+      <h1 class="title">
+        Sales
+        <small>
+          <a href="#" onclick="toggle_modal('create-user')">
+            <i class="fa fa-sm fa-plus"></i>
+          </a>
+        </small>
+      </h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+
+</script>
+{% endblock %}

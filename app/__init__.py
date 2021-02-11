@@ -40,8 +40,10 @@ def db_session():
 
 # Routes
 from app.routes import main
-from app.routes import users
+from app.routes import admin
+from app.routes import sales
 
 
 app.include_router(main.router)
-app.include_router(users.router)
+app.include_router(admin.router)
+app.include_router(sales.router)

@@ -76,6 +76,7 @@ class RoleChecker:
 
 login_required = RoleChecker()
 admin_only = RoleChecker(['admin'])
+sales_only = RoleChecker(['sales'])
 
 
 ### Dependencies End ###
