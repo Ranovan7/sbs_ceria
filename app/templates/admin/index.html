@@ -13,37 +13,60 @@
   <div>
     <div class="container">
       <h1 class="title">
-        Users
+        Sales
         <small>
-          <a href="#" onclick="toggle_modal('create-user')">
+          <a href="#" onclick="toggle_modal('create-sales')">
             <i class="fa fa-sm fa-plus"></i>
           </a>
         </small>
       </h1>
-      <div class="modal" id="create-user">
+      <div class="modal" id="create-sales">
         <div class="modal-background"></div>
         <div class="modal-card">
-          <form action="/admin/users" method="post">
+          <form action="/admin/users/sales" method="post">
             <header class="modal-card-head">
-              <p class="modal-card-title">Tambah User</p>
-              <button class="delete" type="button" aria-label="close" onclick="toggle_modal('create-user')"></button>
+              <p class="modal-card-title">Tambah Sales</p>
+              <button class="delete" type="button" aria-label="close" onclick="toggle_modal('create-sales')"></button>
             </header>
             <section class="modal-card-body">
-              <div class="pt-2 pb-2">
-                <label class="label" for="username">Username</label>
-                <input class="input is-link" type="text" name="username" value="">
+              <div class="columns">
+                <div class="column is-four-fifths pt-2 pb-2">
+                  <label class="label" for="username">Nama</label>
+                  <input class="input is-link" type="text" name="nama" value="" required>
+                </div>
+                <div class="column pt-2 pb-2">
+                  <label class="label" for="username">Kode</label>
+                  <input class="input is-link" type="text" name="kode" value="" required>
+                </div>
               </div>
-              <div class="pt-2 pb-2">
-                <label class="label" for="password">Password</label>
-                <input class="input is-link" type="password" name="password" value="">
+              <div class="columns">
+                <div class="column pt-2 pb-2">
+                  <label class="label" for="username">Username</label>
+                  <input class="input is-link" type="text" name="username" value="" required>
+                </div>
+                <div class="column pt-2 pb-2">
+                  <label class="label" for="password">Password</label>
+                  <input class="input is-link" type="password" name="password" value="" required>
+                </div>
               </div>
-              <div class="pt-2 pb-2">
-                <label class="label" for="password">Tugas</label>
-                <div class="select is-link">
-                  <select name="role">
-                    <option value="2" selected>Sales</option>
-                    <option value="3">Gudang</option>
-                  </select>
+              <div class="columns">
+                <div class="column is-three-quarters pt-2 pb-2">
+                  <label class="label" for="username">Alamat</label>
+                  <input class="input is-link" type="text" name="alamat" placeholder="(tidak wajib)">
+                </div>
+                <div class="column pt-2 pb-2">
+                  <label class="label" for="username">Kota</label>
+                  <input class="input is-link" type="text" name="kota" placeholder="(tidak wajib)">
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column pt-2 pb-2">
+                  <label class="label" for="username">Telepon</label>
+                  <input class="input is-link" type="text" name="telepon" placeholder="(tidak wajib)">
+                </div>
+                <div class="column is-three-fifths pt-2 pb-2">
+                  <label class="label" for="username">Keterangan</label>
+                  <input class="input is-link" type="text" name="keterangan" placeholder="(tidak wajib)">
                 </div>
               </div>
             </section>
@@ -51,7 +74,7 @@
               <div class="pl-2 pr-2">
                 <input class="button is-link" type="submit" value="Tambah">
               </div>
-              <button class="button" type="button" onclick="toggle_modal('create-user')">Batal</button>
+              <button class="button" type="button" onclick="toggle_modal('create-sales')">Batal</button>
             </footer>
           </form>
         </div>
@@ -61,22 +84,38 @@
       <table class="table is-bordered">
         <thead>
           <tr>
+            <th>Nama</th>
             <th>Username</th>
-            <th>Role</th>
+            <th>Kode</th>
+            <th>Telepon</th>
+            <th>Bayar</th>
+            <th>Total Jual</th>
+            <th>Total Retur</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {% for us in users %}
+          {% for sal in sales %}
           <tr>
-            <td>{{ us.username }}</td>
-            <td>{{ us.role_tag }}</td>
+            <td>{{ sal.nama }}</td>
+            <td>{{ sal.get_user().username }}</td>
+            <td>{{ sal.kode.upper() }}</td>
+            <td>{{ sal.telepon }}</td>
+            <td>{{ sal.bayar }}</td>
+            <td>{{ sal.total_jual }}</td>
+            <td>{{ sal.total_retur or 0 }}</td>
             <td>
               <small>
-                <a href="#" onclick="toggle_password({{ us.id }})">
+                <a href="#" onclick="toggle_password({{ sal.get_user().id }})">
                   <span class="fa-passwd-reset fa-stack">
                     <i class="fa fa-undo fa-stack-2x"></i>
                     <i class="fa fa-lock fa-stack-1x"></i>
+                  </span>
+                </a>
+                <a href="#">
+                  <span class="fa-edit-sales fa-stack">
+                    <i class="fa fa-undo fa-stack-2x"></i>
+                    <i class="fa fa-user fa-stack-1x"></i>
                   </span>
                 </a>
             </small>

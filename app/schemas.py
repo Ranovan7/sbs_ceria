@@ -1,12 +1,33 @@
 from fastapi import Form
 from pydantic import BaseModel
+from typing import Optional
 
 
-class CreateUser(BaseModel):
+class CreateSales(BaseModel):
+    nama: str
+    kode: str
     username: str
     password: str
-    role: int
+    alamat: str
+    kota: str
+    telepon: str
+    keterangan: str
 
     @classmethod
-    def as_form(cls, username: str = Form(...), password: str = Form(...), role: int = Form(...)):
-        return cls(username=username, password=password, role=role)
+    def as_form(cls,
+        nama: str = Form(...),
+        kode: str = Form(...),
+        username: str = Form(...),
+        password: str = Form(...),
+        alamat: Optional[str] = Form(""),
+        kota: Optional[str] = Form(""),
+        telepon: Optional[str] = Form(""),
+        keterangan: Optional[str] = Form("")):
+        return cls(nama=nama,
+            kode=kode,
+            username=username,
+            password=password,
+            alamat=alamat,
+            kota=kota,
+            telepon=telepon,
+            keterangan=keterangan)

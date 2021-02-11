@@ -2,8 +2,8 @@ from fastapi import APIRouter, Request, Depends, Form, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
 from app import templates
-from app.models import User
-from app.schemas import CreateUser
+from app.models import User, Sales
+from app.schemas import CreateSales
 from app.utils import db_session, current_user, admin_only
 
 router = APIRouter(
@@ -16,20 +16,37 @@ router = APIRouter(
 
 @router.get("/", dependencies=[Depends(admin_only)])
 async def index(request: Request, user = Depends(current_user), db: Session = Depends(db_session)):
-    users = db.query(User).order_by(User.id).all()
-    return templates.TemplateResponse("admin/index.html", {"request": request, "user": user, 'users': users})
+    sales = db.query(Sales).order_by(Sales.id).all()
+    return templates.TemplateResponse("admin/index.html", {"request": request, "user": user, 'sales': sales})
 
 
-@router.post("/users", dependencies=[Depends(admin_only)])
-async def create_user(user_form: CreateUser = Depends(CreateUser.as_form), user=Depends(current_user), db = Depends(db_session)):
+@router.post("/users/sales", dependencies=[Depends(admin_only)])
+async def create_user(sales_form: CreateSales = Depends(CreateSales.as_form), user=Depends(current_user), db = Depends(db_session)):
+    # create user
     user = User(
-        username=user_form.username,
-        role=user_form.role
+        username=sales_form.username,
+        role=2 # sales
     )
-    user.set_password(user_form.password)
+    user.set_password(sales_form.password)
+
+    # create sales
+    sales = Sales(
+        nama=sales_form.nama,
+        kode=sales_form.kode,
+        alamat=sales_form.alamat,
+        kota=sales_form.kota,
+        telepon=sales_form.telepon,
+        keterangan=sales_form.keterangan
+    )
 
     db.add(user)
+    db.add(sales)
     db.commit()
+    db.refresh(user)
+
+    sales.user_id = user.id
+    db.commit()
+
     return RedirectResponse("/admin", status_code=status.HTTP_303_SEE_OTHER)
 
 

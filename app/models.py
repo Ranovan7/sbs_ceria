@@ -8,13 +8,13 @@ from typing import Optional
 from jose import JWTError, jwt
 
 from app import SECRET_KEY, ALGORITHM
-from app import db_session
+from app import SessionLocal
 
 Base = declarative_base()
 role_str = [
-    'admin',
-    'sales',
-    'gudang'
+    'admin', # 1
+    'sales', # 2
+    'gudang' # 3
 ]
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -54,7 +54,7 @@ class Sales(Base):
     __tablename__ = "sales"
 
     id = Column(Integer, primary_key=True, index=True)
-    kode = Column(String(2), unique=True, nullable=False)
+    kode = Column(String(3), unique=True, nullable=False)
     nama = Column(Text, nullable=False)
     alamat = Column(Text)
     kota = Column(Text)
@@ -68,6 +68,8 @@ class Sales(Base):
 
     user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
 
-    @property
-    def user(self, db: Session = Depends(db_session)):
-        return db.query(User).get(self.user_id)
+    def get_user(self):
+        db = SessionLocal()
+        user = db.query(User).get(self.user_id)
+        db.close()
+        return user
