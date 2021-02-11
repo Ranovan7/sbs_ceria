@@ -20,14 +20,22 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
+templates = Jinja2Templates(directory="./app/templates")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-templates = Jinja2Templates(directory="./app/templates")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+def db_session():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 # Routes

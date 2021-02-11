@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime
+from fastapi import Depends
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -6,6 +8,7 @@ from typing import Optional
 from jose import JWTError, jwt
 
 from app import SECRET_KEY, ALGORITHM
+from app import db_session
 
 Base = declarative_base()
 role_str = [
@@ -45,3 +48,26 @@ class User(Base):
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt
+
+
+class Sales(Base):
+    __tablename__ = "sales"
+
+    id = Column(Integer, primary_key=True, index=True)
+    kode = Column(String(2), unique=True, nullable=False)
+    nama = Column(Text, nullable=False)
+    alamat = Column(Text)
+    kota = Column(Text)
+    telepon = Column(String(13))
+    keterangan = Column(Text)
+    bayar = Column(Integer, default=0)
+    total_jual = Column(Integer, default=0)
+    jumlah_komi = Column(Integer)
+    komisi = Column(Integer)
+    total_retur = Column(Integer)
+
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+
+    @property
+    def user(self, db: Session = Depends(db_session)):
+        return db.query(User).get(self.user_id)

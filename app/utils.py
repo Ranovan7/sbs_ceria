@@ -6,7 +6,7 @@ from functools import wraps
 from typing import Callable, List
 from jose import JWTError, jwt
 
-from app import app, oauth2_scheme, SessionLocal
+from app import app, oauth2_scheme, db_session
 from app import SECRET_KEY, ALGORITHM
 from app.models import User
 
@@ -44,14 +44,6 @@ async def not_allowed_exception_handler(request: Request, exc: NotAllowedExcepti
 ### Exceptions End ###
 
 ### Dependencies ###
-def db_session():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 async def current_user(token: str = Cookie(None), db: Session = Depends(db_session)):
     if not token:
         return None
