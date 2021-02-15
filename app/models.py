@@ -104,7 +104,7 @@ class Pelanggan(Base):
     telepon = Column(String(13))
     keterangan = Column(Text)
 
-    limit = Column(Integer, default=0)
+    limits = Column(Integer, default=0)
     toleransi = Column(Integer, default=0)
     diskon = Column(Float, default=0)
 
@@ -130,7 +130,7 @@ class InfoPajak(Base):
     __tablename__ = "info_pajak"
 
     id = Column(Integer, primary_key=True, index=True)
-    npwp = Column(Text, unique=True, nullable=False)
+    npwp = Column(Text, nullable=False)
     ppn = Column(Boolean)
     pkp = Column(Text)
     nama = Column(Text)
