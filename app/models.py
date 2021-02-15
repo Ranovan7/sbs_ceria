@@ -26,6 +26,7 @@ class User(Base):
     username = Column(String(30), unique=True, nullable=False)
     password = Column(Text, nullable=False)
     role = Column(Integer, nullable=False)
+    last_login = Column(DateTime)
 
     @property
     def role_tag(self):
@@ -48,6 +49,15 @@ class User(Base):
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt
+
+
+class UserLog:
+    tanggal = Column(DateTime)
+    tindakan = Column(String(6))  # insert, update, delete
+
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    object = Column(Text)
+    object_id = Column(Integer)
 
 
 class Sales(Base):
@@ -136,3 +146,44 @@ class Pabrik(Base):
     id = Column(Integer, primary_key=True, index=True)
     kode = Column(Text, unique=True, nullable=False)
     nama = Column(Text, nullable=False)
+
+
+class Obat(Base):
+    __tablename__ = "obat"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nama = Column(Text, nullable=False)
+    jenis = Column(Text, nullable=False)  # btl, box, tube, dsb
+
+
+class Barang(Base):
+    __tablename__ = "barang"
+
+    id = Column(Integer, primary_key=True, index=True)
+    batch = Column(Text, nullable=False)
+    expired_date = Column(DateTime, nullable=False)
+
+    obat_id = Column(Integer, ForeignKey('obat.id'), nullable=True)
+
+
+class Penjualan(Base):
+    __tablename__ = "penjualan"
+
+    id = Column(Integer, primary_key=True, index=True)
+    tgl = Column(DateTime, nullable=False, default=datetime.now())
+
+    sales_id = Column(Integer, ForeignKey('sales.id'), nullable=True)
+    pelanggan_id = Column(Integer, ForeignKey('pelanggan.id'), nullable=True)
+    item_penjualan_id = Column(Integer, ForeignKey('item_penjualan.id'), nullable=True)
+
+
+class ItemPenjualan(Base):
+    __tablename__ = "item_penjualan"
+
+    id = Column(Integer, primary_key=True, index=True)
+    qty = Column(Integer)
+    satuan = Column(String(10))
+    diskon = Column(Float)
+
+    penjualan_id = Column(Integer, ForeignKey('penjualan.id'), nullable=True)
+    barang_id = Column(Integer, ForeignKey('barang.id'), nullable=True)
