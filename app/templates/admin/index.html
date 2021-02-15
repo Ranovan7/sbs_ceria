@@ -88,9 +88,6 @@
             <th>Username</th>
             <th>Kode</th>
             <th>Telepon</th>
-            <th>Bayar</th>
-            <th>Total Jual</th>
-            <th>Total Retur</th>
             <th></th>
           </tr>
         </thead>
@@ -101,9 +98,6 @@
             <td>{{ sal.get_user().username }}</td>
             <td>{{ sal.kode.upper() }}</td>
             <td>{{ sal.telepon }}</td>
-            <td>{{ sal.bayar }}</td>
-            <td>{{ sal.total_jual }}</td>
-            <td>{{ sal.total_retur or 0 }}</td>
             <td>
               <small>
                 <a href="#" onclick="toggle_password({{ sal.get_user().id }})">

@@ -34,6 +34,20 @@ def create_admin(username: str):
         print(f"Failed at Creating Admin : {e}")
 
 
+@cli_app.command()
+def import_master(table: str, filepath: str):
+    print(filepath)
+    if table == 'sales':
+        print(f"Importing {table.title()}")
+    elif table == 'antar':
+        print(f"Importing {table.title()}")
+    elif table == 'supplier':
+        print(f"Importing {table.title()}")
+    elif table == 'pelanggan':
+        print(f"Importing {table.title()}")
+    else:
+        print("Table not found or not registered.")
+
 
 if __name__ == "__main__":
     cli_app()
