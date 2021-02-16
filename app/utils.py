@@ -3,7 +3,6 @@ from fastapi import Depends, HTTPException, Request, Cookie, status
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from functools import wraps
 from typing import Callable, List, Dict
 from jose import JWTError, jwt
 
