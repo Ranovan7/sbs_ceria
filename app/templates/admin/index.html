@@ -95,12 +95,12 @@
           {% for sal in sales %}
           <tr>
             <td>{{ sal.nama }}</td>
-            <td>{{ sal.get_user().username }}</td>
+            <td>{{ sal.user.username }}</td>
             <td>{{ sal.kode.upper() }}</td>
             <td>{{ sal.telepon }}</td>
             <td>
               <small>
-                <a href="#" onclick="toggle_password({{ sal.get_user().id }})">
+                <a href="#" onclick="toggle_password({{ sal.user.id }})">
                   <span class="fa-passwd-reset fa-stack">
                     <i class="fa fa-undo fa-stack-2x"></i>
                     <i class="fa fa-lock fa-stack-1x"></i>

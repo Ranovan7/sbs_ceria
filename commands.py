@@ -2,8 +2,8 @@ from fastapi import Depends
 
 from app import SessionLocal
 from app import engine, db_session
-from app.models import Base, User, Sales, Antar, InfoPajak, Supplier, Pelanggan
-from app.schemas import BaseSales, MasterSupplier, MasterPelanggan
+from app.models import Base, User, Sales, Antar, InfoPajak, Supplier, Pelanggan, Obat
+from app.schemas import BaseSales, MasterSupplier, MasterPelanggan, BaseObat
 
 import typer
 import csv
@@ -53,6 +53,8 @@ def import_master(table: str, filepath: str):
         add_supplier(data)
     elif table == 'pelanggan':
         add_pelanggan(data)
+    elif table == 'obat':
+        add_obat(data)
     else:
         print("Table not found or not registered.")
 
@@ -175,6 +177,23 @@ def add_supplier(suppliers):
                 telepon=data.telepon,
                 keterangan=data.keterangan.title(),
                 info_pajak_id=pajak.id
+            )
+            row = insert_data(row)
+            print(f"-- added {row.nama}")
+        except Exception as e:
+            print(f"Error : {e}")
+
+
+def add_obat(obats):
+    if not obats:
+        print("No Data Found")
+
+    for obat in obats:
+        try:
+            data = BaseObat(**obat)
+            row = Obat(
+                nama=data.nama.title(),
+                jenis=data.jenis.lower(),
             )
             row = insert_data(row)
             print(f"-- added {row.nama}")

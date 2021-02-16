@@ -73,3 +73,8 @@ class MasterPelanggan(BasePelangganSupplier):
 
     def ppn_bool(self):
         return True if self.ppn == 'True' else False
+
+
+class BaseObat(BaseModel):
+    nama: str
+    jenis: str
