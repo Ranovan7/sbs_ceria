@@ -29,8 +29,8 @@
 
           <div id="notification">
             {% if message %}
-              <div class="notification is-{{ message.type }}">
-                <button class="delete"></button>
+              <div class="notification is-{{ message.type }}" id="notif">
+                <button class="delete" onclick="closeNotification('notif')"></button>
                 {{ message.text }}
               </div>
             {% endif %}

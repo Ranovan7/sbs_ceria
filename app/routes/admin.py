@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Request, Depends, Form, status
+from fastapi import APIRouter, Request, Depends, Form, Cookie, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
 from app import templates
 from app.models import User, Sales
 from app.schemas import CreateSales, BaseUser
-from app.utils import db_session, current_user, admin_only
+from app.utils import db_session, current_user, admin_only, get_message
 from app.utils import RedirectWithMessage, CustomTemplateResponse
 
 router = APIRouter(
@@ -16,9 +16,10 @@ router = APIRouter(
 
 
 @router.get("/", dependencies=[Depends(admin_only)])
-async def index(request: Request, user = Depends(current_user), db: Session = Depends(db_session)):
+async def index(request: Request, user = Depends(current_user), db: Session = Depends(db_session), message = Depends(get_message)):
     sales = db.query(Sales).order_by(Sales.id).all()
-    return CustomTemplateResponse("admin/index.html", {"request": request, "user": user, 'sales': sales})
+    print(message)
+    return CustomTemplateResponse("admin/index.html", {"request": request, "user": user, 'sales': sales, 'message': message})
 
 
 @router.post("/users/sales", dependencies=[Depends(admin_only)])

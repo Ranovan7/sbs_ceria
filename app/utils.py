@@ -47,6 +47,16 @@ async def not_allowed_exception_handler(request: Request, exc: NotAllowedExcepti
 ### Dependencies ###
 
 
+async def get_message(message_text: str = Cookie(None), message_type: str = Cookie(None), message: str = Cookie(None)):
+    if message == 'false':
+        return None
+
+    return {
+        'text': message_text,
+        'type': message_type
+    }
+
+
 async def current_user(token: str = Cookie(None), db: Session = Depends(db_session)):
     if not token:
         return None
@@ -94,21 +104,15 @@ def RedirectWithMessage(url: str, message: str, type: str):
     response = RedirectResponse(url, status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="message_text", value=message)
     response.set_cookie(key="message_type", value=type)
-    response.set_cookie(key="is_message", value="true")
+    response.set_cookie(key="message", value="true")
     return response
 
 
-def CustomTemplateResponse(filepath:str, data: Dict, message_text: str = Cookie(None), message_type: str = Cookie(None), is_message: str = Cookie(None)):
-    if is_message == "true":
-        data['message'] = {
-            'text': message_text,
-            'type': message_type or "info"
-        }
-
+def CustomTemplateResponse(filepath:str, data: Dict):
     response = templates.TemplateResponse(filepath, data)
     response.set_cookie(key="message_text", value=None)
     response.set_cookie(key="message_type", value=None)
-    response.set_cookie(key="is_message", value="false")
+    response.set_cookie(key="message", value="false")
     return response
 
 

@@ -11,7 +11,7 @@ function formToJson(form){
     return results;
 }
 
-function toggle_modal(id, callback) {
+function toggleModal(id, callback) {
   var element = document.getElementById(id);
   if (element.classList.contains('is-active')) {
     element.classList.remove("is-active");
@@ -48,4 +48,9 @@ function sendPostRequest(endpoint, data, callback){
 
 function showMessage(message, type) {
   var elem = document.getElementById('notification');
+}
+
+function closeNotification(id) {
+  notif = document.getElementById(id);
+  notif.parentNode.remove(notif);
 }
