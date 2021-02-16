@@ -27,10 +27,21 @@
       <div class="container" id="content-wrapper">
         <div class="">
 
-            {% block content %}{% endblock %}
+          <div id="notification">
+            {% if message %}
+              <div class="notification is-{{ message.type }}">
+                <button class="delete"></button>
+                {{ message.text }}
+              </div>
+            {% endif %}
+          </div>
+
+          {% block content %}{% endblock %}
         </div>
       </div>
     </div>
     {% block js %}{% endblock %}
   </body>
+
+  <script src="/static/js/main.js"></script>
 </html>

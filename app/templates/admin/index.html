@@ -15,7 +15,7 @@
       <h1 class="title">
         Sales
         <small>
-          <a href="#" onclick="toggle_modal('create-sales')">
+          <a href="#" onclick="toggle_create_user()">
             <i class="fa fa-sm fa-plus"></i>
           </a>
         </small>
@@ -26,7 +26,7 @@
           <form action="/admin/users/sales" method="post">
             <header class="modal-card-head">
               <p class="modal-card-title">Tambah Sales</p>
-              <button class="delete" type="button" aria-label="close" onclick="toggle_modal('create-sales')"></button>
+              <button class="delete" type="button" aria-label="close" onclick="toggle_create_user()"></button>
             </header>
             <section class="modal-card-body">
               <div class="columns">
@@ -74,7 +74,7 @@
               <div class="pl-2 pr-2">
                 <input class="button is-link" type="submit" value="Tambah">
               </div>
-              <button class="button" type="button" onclick="toggle_modal('create-sales')">Batal</button>
+              <button class="button" type="button" onclick="toggle_create_user()">Batal</button>
             </footer>
           </form>
         </div>
@@ -86,7 +86,6 @@
           <tr>
             <th>Nama</th>
             <th>Username</th>
-            <th>Kode</th>
             <th>Telepon</th>
             <th></th>
           </tr>
@@ -94,30 +93,69 @@
         <tbody>
           {% for sal in sales %}
           <tr>
-            <td>{{ sal.nama }}</td>
-            <td>{{ sal.user.username }}</td>
-            <td>{{ sal.kode.upper() }}</td>
+            <td>{{ sal.kode.upper() }} - {{ sal.nama }}</td>
+            <td align="center">
+              {% if sal.user %}
+                {{ sal.user.username }}
+              {% else %}
+                <a onclick="toggle_add_user({{ sal.id }})"><i class="fas fa-user-plus"></i></a>
+              {% endif %}
+            </td>
             <td>{{ sal.telepon }}</td>
             <td>
-              <small>
-                <a href="#" onclick="toggle_password({{ sal.user.id }})">
-                  <span class="fa-passwd-reset fa-stack">
-                    <i class="fa fa-undo fa-stack-2x"></i>
-                    <i class="fa fa-lock fa-stack-1x"></i>
-                  </span>
-                </a>
-                <a href="#">
-                  <span class="fa-edit-sales fa-stack">
-                    <i class="fa fa-undo fa-stack-2x"></i>
-                    <i class="fa fa-user fa-stack-1x"></i>
-                  </span>
-                </a>
-            </small>
+              {% if sal.user %}
+                <small>
+                  <a href="#" onclick="toggle_password({{ sal.user.id }})">
+                    <span class="fa-passwd-reset fa-stack">
+                      <i class="fa fa-undo fa-stack-2x"></i>
+                      <i class="fa fa-lock fa-stack-1x"></i>
+                    </span>
+                  </a>
+                  <a href="#">
+                    <span class="fa-edit-sales fa-stack">
+                      <i class="fa fa-undo fa-stack-2x"></i>
+                      <i class="fa fa-user fa-stack-1x"></i>
+                    </span>
+                  </a>
+              </small>
+            {% endif %}
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+
+      <!-- Modal to add user on existing sales -->
+      <div class="modal" id="add-user">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <form id="add_user" action="/admin/users" method="post">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Tambah User</p>
+              <button class="delete" type="button" aria-label="close" onclick="toggle_add_user(0)"></button>
+            </header>
+            <section class="modal-card-body">
+              <div class="pt-2 pb-2">
+                <label class="label" for="username">Username</label>
+                <input class="input is-link" type="text" name="username" value="">
+              </div>
+              <div class="pt-2 pb-2">
+                <label class="label" for="password">Password</label>
+                <input class="input is-link" type="password" name="password" value="">
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="pl-2 pr-2">
+                <input class="button is-link" type="submit" value="Tambah">
+                <!-- <button class="button is-link" type="button" onclick="add_user()">Tambah</button> -->
+              </div>
+              <button class="button" type="button" onclick="toggle_add_user(0)">Batal</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal to change user password -->
       <div class="modal" id="change-password">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -145,32 +183,39 @@
           </form>
         </div>
       </div>
+
     </div>
   </div>
 {% endblock %}
 
 {% block js %}
 <script>
-  function toggle_modal(id) {
-    var element = document.getElementById(id);
-    if (element.classList.contains('is-active')) {
-      element.classList.remove("is-active");
-      element.classList.remove("is-clipped");
-    } else {
-      element.classList.add("is-active");
-      element.classList.add("is-clipped");
-    }
+  let add_user_id = 0;
+
+  function toggle_create_user() {
+    toggle_modal("create-sales");
   }
+
+  function toggle_add_user(sales_id) {
+    toggle_modal("add-user", function() {
+      document.getElementById('add_user').action = "/admin/users/sales/" + sales_id;
+      console.log(formToJson(document.getElementById('add_user')));
+      add_user_id = sales_id;
+    });
+  }
+
+  // function add_user() {
+  //   let data = formToJson(document.getElementById('add_user'));
+  //   let res = sendPostRequest("/admin/users/sales/" + add_user_id, data, function(res){
+  //     console.log(res.status);
+  //     showMessage(res.status);
+  //   });
+  // }
+
   function toggle_password(user_id) {
-    var element = document.getElementById("change-password");
-    if (user_id == 0) {
-      element.classList.remove("is-active");
-      element.classList.remove("is-clipped");
-    } else {
-      element.classList.add("is-active");
-      element.classList.add("is-clipped");
-      document.getElementById('change_password').action = "/admin/users/" + user_id + "/password"
-    }
+    toggle_modal("change-password", function() {
+      document.getElementById('change_password').action = "/admin/users/" + user_id + "/password";
+    });
   }
 </script>
 {% endblock %}
