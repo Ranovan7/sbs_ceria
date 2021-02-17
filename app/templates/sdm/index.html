@@ -1,9 +1,8 @@
 {% extends 'main/base.html' %}
 
-{% set title = "Admin" %}
+{% set title = "Sumber Daya Manusia" %}
 
 {% block css %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
 <style>
 
 </style>
@@ -23,7 +22,7 @@
       <div class="modal" id="create-sales">
         <div class="modal-background"></div>
         <div class="modal-card">
-          <form action="/admin/users/sales" method="post">
+          <form action="/users/sales" method="post">
             <header class="modal-card-head">
               <p class="modal-card-title">Tambah Sales</p>
               <button class="delete" type="button" aria-label="close" onclick="toggle_create_user()"></button>
@@ -129,7 +128,7 @@
       <div class="modal" id="add-user">
         <div class="modal-background"></div>
         <div class="modal-card">
-          <form id="add_user" action="/admin/users" method="post">
+          <form id="add_user" action="/users" method="post">
             <header class="modal-card-head">
               <p class="modal-card-title">Tambah User</p>
               <button class="delete" type="button" aria-label="close" onclick="toggle_add_user(0)"></button>
@@ -159,7 +158,7 @@
       <div class="modal" id="change-password">
         <div class="modal-background"></div>
         <div class="modal-card">
-          <form id="change_password" action="/admin/users" method="post">
+          <form id="change_password" action="/users" method="post">
             <header class="modal-card-head">
               <p class="modal-card-title">Tambah User</p>
               <button class="delete" type="button" aria-label="close" onclick="toggle_password(0)"></button>
@@ -198,7 +197,7 @@
 
   function toggle_add_user(sales_id) {
     toggleModal("add-user", function() {
-      document.getElementById('add_user').action = "/admin/users/sales/" + sales_id;
+      document.getElementById('add_user').action = "/users/sales/" + sales_id;
       console.log(formToJson(document.getElementById('add_user')));
       add_user_id = sales_id;
     });
@@ -206,7 +205,7 @@
 
   // function add_user() {
   //   let data = formToJson(document.getElementById('add_user'));
-  //   let res = sendPostRequest("/admin/users/sales/" + add_user_id, data, function(res){
+  //   let res = sendPostRequest("/users/sales/" + add_user_id, data, function(res){
   //     console.log(res.status);
   //     showMessage(res.status);
   //   });
@@ -214,7 +213,7 @@
 
   function toggle_password(user_id) {
     toggleModal("change-password", function() {
-      document.getElementById('change_password').action = "/admin/users/" + user_id + "/password";
+      document.getElementById('change_password').action = "/users/" + user_id + "/password";
     });
   }
 </script>

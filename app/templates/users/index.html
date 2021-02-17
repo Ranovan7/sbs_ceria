@@ -1,0 +1,90 @@
+{% extends 'main/base.html' %}
+
+{% set title = "Users" %}
+
+{% block css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <div>
+    <div class="container">
+      <h1 class="title">
+        Users
+      </h1>
+    </div>
+    <div class="container">
+      <table class="table is-bordered">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usr in users %}
+          <tr>
+            <td align="center">
+              {{ usr.username }}
+            </td>
+            <td>{{ usr.role_tag }}</td>
+            <td>
+              <small>
+                <a href="#" onclick="toggle_password({{ usr.id }})">
+                  <span class="fa-passwd-reset fa-stack">
+                    <i class="fa fa-undo fa-stack-2x"></i>
+                    <i class="fa fa-lock fa-stack-1x"></i>
+                  </span>
+                </a>
+              </small>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Modal to change user password -->
+      <div class="modal" id="change-password">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <form id="change_password" action="/admin/users" method="post">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Tambah User</p>
+              <button class="delete" type="button" aria-label="close" onclick="toggle_password(0)"></button>
+            </header>
+            <section class="modal-card-body">
+              <div class="pt-2 pb-2">
+                <label class="label" for="password">Password Baru</label>
+                <input class="input is-link" type="password" name="password" value="">
+              </div>
+              <div class="pt-2 pb-2">
+                <label class="label" for="password">Ulang Password</label>
+                <input class="input is-link" type="password" name="password2" value="">
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="pl-2 pr-2">
+                <input class="button is-link" type="submit" value="Ubah">
+              </div>
+              <button class="button" type="button" onclick="toggle_password(0)">Batal</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  function toggle_password(user_id) {
+    toggleModal("change-password", function() {
+      document.getElementById('change_password').action = "/admin/users/" + user_id + "/password";
+    });
+  }
+</script>
+{% endblock %}

@@ -11,55 +11,50 @@
     </a>
   </div>
 
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-      <a class="navbar-item" href="/">
-        Home
-      </a>
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          Admin
-        </a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="/karyawan">
-            Karyawan
-          </a>
-          <a class="navbar-item" href="/pelanggan">
-            Pelanggan
-          </a>
-          <a class="navbar-item" href="/supplier">
-            Supplier
-          </a>
-          <hr class="navbar-divider">
-          <a class="navbar-item" href="/obat">
-            Obat
-          </a>
-          <a class="navbar-item" href="/barang">
-            Barang
-          </a>
-        </div>
-      </div>
-      <a class="navbar-item" href="/sales">
-        Sales
-      </a>
+  <div id="navbarMain" class="navbar-menu">
+     <div class="navbar-start">
+       <a class="navbar-item">Dashboard</a>
+       <a class="navbar-item" href="/sdm">
+         SDM
+       </a>
+       <div class="navbar-item has-dropdown is-hoverable">
+         <a class="navbar-link" href="/transaksi">Transaksi</a>
+         <div class="navbar-dropdown">
+           <a class="navbar-item">Penjualan</a>
+           <a class="navbar-item">Pembelian</a>
+         </div>
+       </div>
+       <div class="navbar-item has-dropdown is-hoverable">
+         <a class="navbar-link">Keuangan</a>
+         <div class="navbar-dropdown">
+           <a class="navbar-item">Tagihan</a>
+           <a class="navbar-item">Hutang</a>
+         </div>
+       </div>
+       <div class="navbar-item has-dropdown is-hoverable">
+         <a class="navbar-link">Stok</a>
+         <div class="navbar-dropdown">
+           <a class="navbar-item">Status</a>
+           <a class="navbar-item"></a>
+         </div>
+       </div>
+     </div>
 
-      <!--  -->
-    </div>
-
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          {% if not user %}
-            <a class="button is-link is-light" href="/login">
-              Login
-            </a>
-          {% else %}
-            <a class="button is-light" href="/logout">
-              Logout
-            </a>
-          {% endif %}
-        </div>
-      </div>
-    </div>
+     <div class="navbar-end">
+       <div class="navbar-item">
+         <div class="buttons">
+           {% if not user %}
+             <a class="button is-link is-light" href="/login">
+               Login
+             </a>
+           {% else %}
+             <a class="button is-light" href="/logout">
+               Logout
+             </a>
+           {% endif %}
+         </div>
+       </div>
+     </div>
   </div>
+
 </nav>
