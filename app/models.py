@@ -162,8 +162,16 @@ class Barang(Base):
     id = Column(Integer, primary_key=True, index=True)
     batch = Column(Text, nullable=False)
     expired_date = Column(DateTime, nullable=False)
+    stock = Column(Integer, nullable=False, default=1)
 
     obat_id = Column(Integer, ForeignKey('obat.id'), nullable=True)
+
+    @property
+    def obat(self):
+        db = SessionLocal()
+        obat = db.query(Obat).get(self.obat_id)
+        db.close()
+        return obat
 
 
 class Penjualan(Base):

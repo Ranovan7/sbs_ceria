@@ -1,0 +1,101 @@
+{% extends 'main/base.html' %}
+
+{% set title = "Produk" %}
+
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/tom-select@1.1/dist/css/tom-select.css" rel="stylesheet">
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <div>
+    <div class="container">
+      <h1 class="title">
+        Produk
+        <small>
+          <a href="#" onclick="toggle_add_barang()">
+            <i class="fa fa-sm fa-plus"></i>
+          </a>
+        </small>
+      </h1>
+    </div>
+    <div class="mt-3 collapse" id="add-barang">
+      <div class="columns">
+        <div class="column is-half">
+          <form action="/produk/barang" method="post">
+            <div class="columns">
+              <div class="column is-four-fifths" style="z-index: 10000">
+                <label class="label" for="obat_id">Obat</label>
+                <!-- <div class="select is-link"> -->
+                  <select id="obat_id" name="obat_id">
+                    {% for obat in obats %}
+                      <option value="{{ obat.id }}">{{ obat.nama }}</option>
+                    {% endfor %}
+                  </select>
+                <!-- </div> -->
+              </div>
+              <div class="column">
+                <label class="label" for="stock">Stok</label>
+                <input class="input is-link" type="number" name="stock" value="" required>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-three-fifths pt-2 pb-2">
+                <label class="label" for="batch">Batch</label>
+                <input class="input is-link" type="text" name="batch" value="" required>
+              </div>
+              <div class="column pt-2 pb-2">
+                <label class="label" for="expired_date">Tanggal Kadaluarsa</label>
+                <input class="input is-link" type="text" name="expired_date" value="" required>
+              </div>
+            </div>
+            <div class="pl-2 pr-2">
+              <input class="button is-link" type="submit" value="Tambah">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="container">
+      <table class="table is-bordered">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama Obat</th>
+            <th>Batch</th>
+            <th>Tanggal Kadaluarsa</th>
+            <th>Stok</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for barang in barangs %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ barang.obat.nama }}</td>
+            <td>{{ barang.batch }}</td>
+            <td>{{ barang.expired_date.strftime("%d %B %Y") }}</td>
+            <td>{{ barang.stock }}</td>
+            <td></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/tom-select@1.1/dist/js/tom-select.complete.min.js"></script>
+<script>
+  var config = {};
+  tomSelect('#obat_id',config);
+
+  function toggle_add_barang() {
+    toggleCollapsible("add-barang");
+  }
+</script>
+{% endblock %}

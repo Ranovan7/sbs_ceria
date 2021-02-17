@@ -100,7 +100,7 @@
                 <a onclick="toggle_add_user({{ sal.id }})"><i class="fas fa-user-plus"></i></a>
               {% endif %}
             </td>
-            <td>{{ sal.telepon }}</td>
+            <td>{{ sal.telepon or "-" }}</td>
             <td>
               {% if sal.user %}
                 <small>
@@ -117,7 +117,7 @@
                     </span>
                   </a>
               </small>
-            {% endif %}
+            {% else %}-{% endif %}
             </td>
           </tr>
           {% endfor %}

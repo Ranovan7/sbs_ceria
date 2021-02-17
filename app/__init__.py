@@ -43,9 +43,11 @@ from app.routes import main
 from app.routes import users
 from app.routes import sdm
 from app.routes import sales
+from app.routes import produk
 
 
 app.include_router(main.router)
 app.include_router(users.router)
 app.include_router(sdm.router)
 app.include_router(sales.router)
+app.include_router(produk.router)

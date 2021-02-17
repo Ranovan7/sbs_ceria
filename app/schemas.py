@@ -1,6 +1,7 @@
 from fastapi import Form
 from pydantic import BaseModel
 from typing import Optional
+import datetime
 
 
 class BaseUser(BaseModel):
@@ -43,6 +44,24 @@ class CreateSales(BaseSales):
             kota=kota,
             telepon=telepon,
             keterangan=keterangan)
+
+
+class CreateBarang(BaseModel):
+    batch: str
+    expired_date: datetime.date
+    stock: str
+    obat_id: int
+
+    @classmethod
+    def as_form(cls,
+        batch: str = Form(...),
+        expired_date: datetime.date = Form(...),
+        stock: str = Form(...),
+        obat_id: int = Form(...)):
+        return cls(batch=batch,
+            expired_date=expired_date,
+            stock=stock,
+            obat_id=obat_id)
 
 
 class BasePelangganSupplier(BaseModel):

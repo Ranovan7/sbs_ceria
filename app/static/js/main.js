@@ -26,6 +26,22 @@ function toggleModal(id, callback) {
   }
 }
 
+function toggleCollapsible(id, callback) {
+  var element = document.getElementById(id);
+  if (element.classList.contains('collapse')) {
+    element.classList.add("show");
+    element.classList.remove("collapse");
+    console.log("Show Collapsible");
+  } else {
+    element.classList.add("collapse");
+    element.classList.remove("show");
+
+    if (callback) {
+      callback();
+    }
+  }
+}
+
 function sendPostRequest(endpoint, data, callback){
   fetch(endpoint, {
       method: 'POST',

@@ -16,6 +16,19 @@
     <!-- Custom styles for this template-->
     <link rel="stylesheet" href="/static/css/bulma.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style media="screen">
+      .collapse {
+        display: block;
+        max-height: 0px;
+        overflow: hidden;
+        transition: max-height .5s cubic-bezier(0, 1, 0, 1);;
+
+        &.show {
+          max-height: 99em;
+          transition: max-height .5s ease-in-out;
+        }
+      }
+    </style>
 
     {% block css %}{% endblock %}
   </head>
