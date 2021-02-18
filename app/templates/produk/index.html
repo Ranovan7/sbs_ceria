@@ -29,7 +29,7 @@
               <div class="column is-four-fifths" style="z-index: 10000">
                 <label class="label" for="obat_id">Obat</label>
                 <!-- <div class="select is-link"> -->
-                  <select id="obat_id" name="obat_id">
+                  <select id="obat_id" name="obat_id" class="is-link">
                     {% for obat in obats %}
                       <option value="{{ obat.id }}">{{ obat.nama }}</option>
                     {% endfor %}
@@ -42,13 +42,14 @@
               </div>
             </div>
             <div class="columns">
-              <div class="column is-three-fifths pt-2 pb-2">
+              <div class="column is-half pt-2 pb-2">
                 <label class="label" for="batch">Batch</label>
                 <input class="input is-link" type="text" name="batch" value="" required>
               </div>
               <div class="column pt-2 pb-2">
                 <label class="label" for="expired_date">Tanggal Kadaluarsa</label>
-                <input class="input is-link" type="text" name="expired_date" value="" required>
+                <!-- <input class="input is-link" type="text" name="expired_date" value="" required> -->
+                <input type="date" class="input is-link date-picker" name="expired_date" value="2021-01-01">
               </div>
             </div>
             <div class="pl-2 pr-2">
@@ -92,7 +93,7 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select@1.1/dist/js/tom-select.complete.min.js"></script>
 <script>
   var config = {};
-  tomSelect('#obat_id',config);
+  tomSelect('#obat_id', config);
 
   function toggle_add_barang() {
     toggleCollapsible("add-barang");
