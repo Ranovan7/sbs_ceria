@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Depends, Form, Cookie, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from app import templates
 from app.models import Barang, Obat
 from app.schemas import CreateBarang
@@ -46,16 +47,21 @@ async def index(request: Request, query: str = None, user = Depends(current_user
 
 @router.post("/barang", dependencies=[Depends(admin_only)])
 async def create_user(barang_form: CreateBarang = Depends(CreateBarang.as_form), user=Depends(current_user), db = Depends(db_session)):
-    # create sales
-    barang = Barang(
-        batch=barang_form.batch,
-        expired_date=barang_form.expired_date,
-        stock=barang_form.stock,
-        obat_id=barang_form.obat_id
-    )
+    try:
+        barang = Barang(
+            batch=barang_form.batch,
+            expired_date=barang_form.expired_date,
+            stock=barang_form.stock,
+            obat_id=barang_form.obat_id
+        )
 
-    db.add(barang)
-    db.commit()
-    db.refresh(barang)
+        db.add(barang)
+        db.commit()
+        db.refresh(barang)
+    except IntegrityError:
+        message = f"Barang dengan obat, batch, dan expired date yg diisi sudah ada di database"
+        return RedirectWithMessage("/produk",
+            message,
+            "danger")
 
     return RedirectResponse("/produk", status_code=status.HTTP_303_SEE_OTHER)

@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, Float, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 from passlib.context import CryptContext
@@ -165,6 +165,9 @@ class Barang(Base):
     stock = Column(Integer, nullable=False, default=1)
 
     obat_id = Column(Integer, ForeignKey('obat.id'), nullable=True)
+
+    __table_args__ = (UniqueConstraint('batch', 'expired_date', 'obat_id',
+                                          name='barang_batch_date_obat'),)
 
     @property
     def obat(self):
