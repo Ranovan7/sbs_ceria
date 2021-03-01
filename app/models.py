@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
 
-from app import SECRET_KEY, ALGORITHM
+from app import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from app import SessionLocal
 
 Base = declarative_base()
@@ -39,14 +39,15 @@ class User(Base):
         return pwd_context.verify(password, self.password)
 
     def create_access_token(self, expires_delta: Optional[timedelta] = None):
-        to_encode = {
-            "username": self.username
-        }
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
-            expire = datetime.utcnow() + timedelta(minutes=720)
-        to_encode.update({"exp": expire})
+            expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+
+        to_encode = {
+            "username": self.username,
+            "exp": expire
+        }
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt
 
@@ -182,6 +183,7 @@ class Penjualan(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     tgl = Column(DateTime, nullable=False, default=datetime.now())
+    accepted = Column(Boolean, nullable=False, default=False)
 
     sales_id = Column(Integer, ForeignKey('sales.id'), nullable=True)
     pelanggan_id = Column(Integer, ForeignKey('pelanggan.id'), nullable=True)

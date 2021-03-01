@@ -5,7 +5,7 @@ from starlette.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from app import templates
 from app.models import User
-from app.utils import db_session, current_user, login_required
+from app.utils import db_session, current_user, login_required, authenticate_user
 
 router = APIRouter(
     prefix="",
@@ -20,7 +20,7 @@ async def index(request: Request, user=Depends(current_user)):
     if user.role_tag == 'admin':
         return RedirectResponse("/sdm")
     elif user.role_tag == 'sales':
-        return RedirectResponse("/sales")    
+        return RedirectResponse("/sales")
     return templates.TemplateResponse("main/index.html", {"request": request, 'user': user})
 
 
@@ -42,9 +42,27 @@ async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = 
     if user.verify_password(form_data.password):
         response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
         response.set_cookie(key="token", value=user.create_access_token())
+        response.set_cookie(
+            key="Authorization",
+            value=f"Bearer {user.create_access_token()}")
         return response
     else:
         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+
+
+@router.post("/token")
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(db_session)
+):
+    user = authenticate_user(form_data.username, form_data.password, db)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return {"access_token": user.create_access_token(), "token_type": "bearer"}
 
 
 @router.get("/logout", dependencies=[Depends(login_required)])
