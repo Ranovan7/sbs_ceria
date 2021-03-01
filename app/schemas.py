@@ -1,6 +1,6 @@
 from fastapi import Form
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 import datetime
 
 
@@ -106,3 +106,28 @@ class MasterPelanggan(BasePelangganSupplier):
 class BaseObat(BaseModel):
     nama: str
     jenis: str
+
+
+class BaseItemPenjualan(BaseModel):
+    qty: int
+    satuan: str
+    diskon: Optional(int)
+    barang_id: int
+
+
+class ItemPenjualan(BaseItemPenjualan):
+    penjualan_id: int
+
+
+class BasePenjualan(BaseModel):
+    tgl: datetime.datetime
+    sales_id: int
+    pelanggan_id: int
+
+
+class Penjualan(BasePenjualan):
+    accepted: boolean
+
+
+class CreatePenjualan(BasePenjualan):
+    item_penjualan: List[BaseItemPenjualan]
