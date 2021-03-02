@@ -1,6 +1,6 @@
 from fastapi import Depends
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, Float, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -188,6 +188,8 @@ class Penjualan(Base):
     sales_id = Column(Integer, ForeignKey('sales.id'), nullable=True)
     pelanggan_id = Column(Integer, ForeignKey('pelanggan.id'), nullable=True)
 
+    item_penjualan = relationship("ItemPenjualan", back_populates="penjualan", lazy='joined')
+
 
 class ItemPenjualan(Base):
     __tablename__ = "item_penjualan"
@@ -199,3 +201,5 @@ class ItemPenjualan(Base):
 
     penjualan_id = Column(Integer, ForeignKey('penjualan.id'), nullable=True)
     barang_id = Column(Integer, ForeignKey('barang.id'), nullable=True)
+
+    penjualan = relationship("Penjualan", back_populates="item_penjualan")

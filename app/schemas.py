@@ -14,6 +14,7 @@ class BaseUser(BaseModel):
 
 
 class UserInfo(BaseModel):
+    id: int
     username: str
     role_tag: str
     last_login: Optional[datetime.datetime]
@@ -122,9 +123,10 @@ class BaseItemPenjualan(BaseModel):
     barang_id: int
 
 
-class ItemPenjualan(BaseItemPenjualan):
-    satuan: Optional[str]
-    diskon: Optional[int]
+class ItemPenjualanInfo(BaseItemPenjualan):
+    id: int
+    satuan: Optional[str] = None
+    diskon: Optional[int] = None
     penjualan_id: int
 
 
@@ -134,8 +136,13 @@ class BasePenjualan(BaseModel):
     pelanggan_id: int
 
 
-class Penjualan(BasePenjualan):
+class PenjualanInfo(BasePenjualan):
+    id: int
     accepted: bool
+    # item_penjualan: List[ItemPenjualanInfo] = []
+
+    class Config:
+        orm_mode = True
 
 
 class CreatePenjualan(BasePenjualan):
