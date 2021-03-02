@@ -145,6 +145,26 @@ admin_only = RoleChecker(['admin'])
 sales_only = RoleChecker(['sales'])
 
 
+class APIRoleChecker:
+    def __init__(self, roles: List = []):
+        self.roles = roles
+
+    def __call__(self, user = Depends(get_current_user)):
+        if not user:
+            raise NotLoggedInException()
+
+        if not self.roles or user.role_tag in self.roles:
+            print(f"{user.username} - {user.role_tag}")
+            return user
+        else:
+            raise NotAllowedException()
+
+
+api_any_user = APIRoleChecker()
+api_admin_only = APIRoleChecker(['admin'])
+api_sales_only = APIRoleChecker(['sales'])
+
+
 ### Dependencies End ###
 
 

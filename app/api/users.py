@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 from app import db_session
-from app.utils import oauth2_scheme, get_current_user, admin_only
+from app.utils import oauth2_scheme, get_current_user, api_admin_only
 from app.models import User
 from app.schemas import BaseUser, UserInfo
 
@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/",
-    dependencies=[Depends(admin_only)],
+    dependencies=[Depends(api_admin_only)],
     response_model=List[UserInfo])
 async def index(
     db: Session = Depends(db_session)
@@ -25,7 +25,7 @@ async def index(
 
 
 @router.get("/{user_id}",
-    dependencies=[Depends(admin_only)],
+    dependencies=[Depends(api_admin_only)],
     response_model=UserInfo)
 async def get_users(
     user_id: int,
@@ -35,7 +35,7 @@ async def get_users(
 
 
 @router.post("/",
-    dependencies=[Depends(admin_only)],
+    dependencies=[Depends(api_admin_only)],
     response_model=UserInfo)
 async def add_users(
     user: BaseUser,

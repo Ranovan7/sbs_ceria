@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app import db_session
-from app.utils import oauth2_scheme, get_current_user, login_required
+from app.utils import oauth2_scheme, get_current_user, api_any_user
 from app.models import Pelanggan
 
 router = APIRouter(
@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", dependencies=[Depends(login_required)])
+@router.get("/", dependencies=[Depends(api_any_user)])
 async def index(
     sales_id: int = None,
     db: Session = Depends(db_session)
@@ -24,7 +24,7 @@ async def index(
         return db.query(Pelanggan).all()
 
 
-@router.get("/{pelanggan_id}", dependencies=[Depends(login_required)])
+@router.get("/{pelanggan_id}", dependencies=[Depends(api_any_user)])
 async def get_pelanggan(
     pelanggan_id: int,
     db: Session = Depends(db_session)

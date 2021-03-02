@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 from app import db_session
-from app.utils import oauth2_scheme, get_current_user, login_required, admin_only
+from app.utils import oauth2_scheme, get_current_user, api_any_user, api_admin_only
 from app.models import Penjualan, ItemPenjualan
 from app.schemas import CreatePenjualan, PenjualanInfo, ItemPenjualanInfo
 
@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/",
-    dependencies=[Depends(login_required)],)
+    dependencies=[Depends(api_any_user)],)
 async def index(
     type: str = None,
     db: Session = Depends(db_session)
@@ -29,7 +29,7 @@ async def index(
 
 
 @router.get("/{penjualan_id}",
-    dependencies=[Depends(login_required)])
+    dependencies=[Depends(api_any_user)])
 async def get_penjualan(
     penjualan_id: int,
     db: Session = Depends(db_session)
@@ -38,7 +38,7 @@ async def get_penjualan(
 
 
 @router.post("/",
-    dependencies=[Depends(login_required)])
+    dependencies=[Depends(api_any_user)])
 async def add_penjualan(
     penjualan: CreatePenjualan,
     db: Session = Depends(db_session)
@@ -65,7 +65,7 @@ async def add_penjualan(
 
 
 @router.post("/{penjualan_id}/accept",
-    dependencies=[Depends(admin_only)])
+    dependencies=[Depends(api_admin_only)])
 async def accept_penjualan(
     penjualan_id: int,
     db: Session = Depends(db_session)
@@ -77,7 +77,7 @@ async def accept_penjualan(
 
 
 @router.post("/{penjualan_id}/items",
-    dependencies=[Depends(admin_only)],)
+    dependencies=[Depends(api_admin_only)],)
 async def item_penjualan(
     penjualan_id: int,
     db: Session = Depends(db_session)
