@@ -46,7 +46,7 @@ async def index(request: Request, query: str = None, user = Depends(current_user
 
 
 @router.post("/barang", dependencies=[Depends(admin_only)])
-async def create_user(barang_form: CreateBarang = Depends(CreateBarang.as_form), user=Depends(current_user), db = Depends(db_session)):
+async def create_barang(barang_form: CreateBarang = Depends(CreateBarang.as_form), user=Depends(current_user), db = Depends(db_session)):
     try:
         barang = Barang(
             batch=barang_form.batch,

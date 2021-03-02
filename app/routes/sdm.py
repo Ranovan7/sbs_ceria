@@ -23,7 +23,7 @@ async def index(request: Request, user = Depends(current_user), db: Session = De
 
 
 @router.post("/sales", dependencies=[Depends(admin_only)])
-async def create_user(sales_form: CreateSales = Depends(CreateSales.as_form), user=Depends(current_user), db = Depends(db_session)):
+async def create_sales(sales_form: CreateSales = Depends(CreateSales.as_form), user=Depends(current_user), db = Depends(db_session)):
     # create user
     user = User(
         username=sales_form.username,

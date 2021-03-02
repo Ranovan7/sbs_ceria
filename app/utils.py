@@ -1,7 +1,7 @@
 from uvicorn.workers import UvicornWorker
 from fastapi import Depends, HTTPException, Request, Cookie, status
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from typing import Callable, List, Dict
 from jose import JWTError, jwt
@@ -34,13 +34,29 @@ async def not_logged_in_exception_handler(request: Request, exc: NotLoggedInExce
     params = "message_text=Please Login to Access the Page"
     params += "&message_type=danger"
     # return RedirectResponse(f"/login?{params}")
-    return {401: {"description": "Not Logged In"}}
+    return JSONResponse(
+        status_code=401,
+        content={
+            "error": {
+                "type": "Not Authorized",
+                "message": "Please Log In to access endpoint"
+            },
+        },
+    )
 
 
 @app.exception_handler(NotAllowedException)
 async def not_allowed_exception_handler(request: Request, exc: NotAllowedException):
     # return RedirectResponse("/forbidden")
-    return {403: {"description": "Not Authorized"}}
+    return JSONResponse(
+        status_code=403,
+        content={
+            "error": {
+                "type": "Not Authorized",
+                "message": "Please Log In as user with apropriate role"
+            },
+        },
+    )
 
 
 ### Exceptions End ###
