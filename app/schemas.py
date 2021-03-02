@@ -13,6 +13,15 @@ class BaseUser(BaseModel):
         return cls(username=username, password=password)
 
 
+class UserInfo(BaseModel):
+    username: str
+    role_tag: str
+    last_login: Optional[datetime.datetime]
+
+    class Config:
+        orm_mode = True
+
+
 class BaseSales(BaseModel):
     nama: str
     kode: str

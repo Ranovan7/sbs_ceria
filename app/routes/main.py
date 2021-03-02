@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app import templates
 from app.models import User
 from app.utils import db_session, current_user, login_required, authenticate_user
+import datetime
 
 router = APIRouter(
     prefix="",
@@ -40,6 +41,10 @@ async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = 
         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
 
     if user.verify_password(form_data.password):
+        # update user last_login
+        user.last_login = datetime.datetime.now()
+        db.commit()
+
         response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
         response.set_cookie(key="token", value=user.create_access_token())
         response.set_cookie(
@@ -62,6 +67,9 @@ async def login_for_access_token(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    # update user last_login
+    user.last_login = datetime.datetime.now()
+    db.commit()
     return {"access_token": user.create_access_token(), "token_type": "bearer"}
 
 
