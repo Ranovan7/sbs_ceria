@@ -25,7 +25,7 @@ class NotLoggedInException(Exception):
 
 
 class NotAllowedException(Exception):
-    def __init__(self, name: str = "NotLoggeNotAllowedExceptiondInException"):
+    def __init__(self, name: str = "NotAllowedException"):
         self.name = name
 
 
@@ -33,12 +33,14 @@ class NotAllowedException(Exception):
 async def not_logged_in_exception_handler(request: Request, exc: NotLoggedInException):
     params = "message_text=Please Login to Access the Page"
     params += "&message_type=danger"
-    return RedirectResponse(f"/login?{params}")
+    # return RedirectResponse(f"/login?{params}")
+    return {401: {"description": "Not Logged In"}}
 
 
 @app.exception_handler(NotAllowedException)
 async def not_allowed_exception_handler(request: Request, exc: NotAllowedException):
-    return RedirectResponse("/forbidden")
+    # return RedirectResponse("/forbidden")
+    return {403: {"description": "Not Authorized"}}
 
 
 ### Exceptions End ###
@@ -116,6 +118,7 @@ class RoleChecker:
             raise NotLoggedInException()
 
         if not self.roles or user.role_tag in self.roles:
+            print(f"{user.username} - {user.role_tag}")
             return user
         else:
             raise NotAllowedException()

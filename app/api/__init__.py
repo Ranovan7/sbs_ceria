@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api import barang, pelanggan, penjualan
+from app.api import barang, pelanggan, penjualan, users
 
 router = APIRouter(
     prefix="/api",
@@ -7,6 +7,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+router.include_router(users.router)
 router.include_router(barang.router)
 router.include_router(pelanggan.router)
 router.include_router(penjualan.router)

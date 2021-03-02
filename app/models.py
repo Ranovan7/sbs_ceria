@@ -187,7 +187,6 @@ class Penjualan(Base):
 
     sales_id = Column(Integer, ForeignKey('sales.id'), nullable=True)
     pelanggan_id = Column(Integer, ForeignKey('pelanggan.id'), nullable=True)
-    item_penjualan_id = Column(Integer, ForeignKey('item_penjualan.id'), nullable=True)
 
 
 class ItemPenjualan(Base):

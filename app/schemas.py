@@ -49,7 +49,7 @@ class CreateSales(BaseSales):
 class CreateBarang(BaseModel):
     batch: str
     expired_date: datetime.date
-    stock: str
+    stock: int
     obat_id: int
 
     @classmethod
@@ -110,12 +110,12 @@ class BaseObat(BaseModel):
 
 class BaseItemPenjualan(BaseModel):
     qty: int
-    satuan: str
-    diskon: Optional(int)
     barang_id: int
 
 
 class ItemPenjualan(BaseItemPenjualan):
+    satuan: Optional[str]
+    diskon: Optional[int]
     penjualan_id: int
 
 
@@ -126,7 +126,7 @@ class BasePenjualan(BaseModel):
 
 
 class Penjualan(BasePenjualan):
-    accepted: boolean
+    accepted: bool
 
 
 class CreatePenjualan(BasePenjualan):
