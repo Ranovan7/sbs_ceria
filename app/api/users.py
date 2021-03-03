@@ -34,16 +34,16 @@ async def get_users(
     return db.query(User).get(user_id)
 
 
-@router.post("/",
-    dependencies=[Depends(api_admin_only)],
-    response_model=UserInfo)
-async def add_users(
-    user: BaseUser,
-    db: Session = Depends(db_session)
-):
-    new_user = User(username=user.username)
-    new_user.set_password(user.password)
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+# @router.post("/",
+#     dependencies=[Depends(api_admin_only)],
+#     response_model=UserInfo)
+# async def add_users(
+#     user: BaseUser,
+#     db: Session = Depends(db_session)
+# ):
+#     new_user = User(username=user.username)
+#     new_user.set_password(user.password)
+#     db.add(new_user)
+#     db.commit()
+#     db.refresh(new_user)
+#     return new_user
