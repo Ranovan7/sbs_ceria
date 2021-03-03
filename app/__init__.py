@@ -12,7 +12,12 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-app = FastAPI()
+app = FastAPI(
+    docs_url="/docs",
+    redoc_url=None,
+    title="SBSehati",
+    description="api documentations",
+    version="0.1.0")
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 SQLALCHEMY_DATABASE_URL = os.environ["DATABASE_URL"]
@@ -43,7 +48,7 @@ from app.routes import main
 from app.routes import users
 from app.routes import sdm
 from app.routes import sales
-from app.routes import produk
+# from app.routes import produk
 from app import api
 
 
@@ -51,5 +56,5 @@ app.include_router(main.router)
 app.include_router(users.router)
 app.include_router(sdm.router)
 app.include_router(sales.router)
-app.include_router(produk.router)
+# app.include_router(produk.router)
 app.include_router(api.router)

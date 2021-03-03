@@ -5,7 +5,7 @@ from app.utils import db_session, current_user, sales_only
 
 router = APIRouter(
     prefix="/sales",
-    tags=["sales"],
+    tags=["html"],
     dependencies=[Depends(sales_only)],
     responses={404: {"description": "Not found"}},
 )

@@ -2,6 +2,7 @@ from uvicorn.workers import UvicornWorker
 from fastapi import Depends, HTTPException, Request, Cookie, status
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse, JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy.orm import Session
 from typing import Callable, List, Dict
 from jose import JWTError, jwt
@@ -33,30 +34,34 @@ class NotAllowedException(Exception):
 async def not_logged_in_exception_handler(request: Request, exc: NotLoggedInException):
     params = "message_text=Please Login to Access the Page"
     params += "&message_type=danger"
-    # return RedirectResponse(f"/login?{params}")
-    return JSONResponse(
-        status_code=401,
-        content={
-            "error": {
-                "type": "Not Authorized",
-                "message": "Please Log In to access endpoint"
+    if "/api" in request.url.path:
+        return JSONResponse(
+            status_code=401,
+            content={
+                "error": {
+                    "type": "Not Authorized",
+                    "message": "Please Log In to access endpoint"
+                },
             },
-        },
-    )
+        )
+    else:
+        return RedirectResponse(f"/login?{params}")
 
 
 @app.exception_handler(NotAllowedException)
 async def not_allowed_exception_handler(request: Request, exc: NotAllowedException):
-    # return RedirectResponse("/forbidden")
-    return JSONResponse(
-        status_code=403,
-        content={
-            "error": {
-                "type": "Not Authorized",
-                "message": "Please Log In as user with apropriate role"
+    if "/api" in request.url.path:
+        return JSONResponse(
+            status_code=403,
+            content={
+                "error": {
+                    "type": "Not Authorized",
+                    "message": "Please Log In as user with appropriate role"
+                },
             },
-        },
-    )
+        )
+    else:
+        return RedirectResponse("/forbidden")
 
 
 ### Exceptions End ###

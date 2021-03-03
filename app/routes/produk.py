@@ -11,7 +11,7 @@ from app.utils import RedirectWithMessage, CustomTemplateResponse
 
 router = APIRouter(
     prefix="/produk",
-    tags=["produk"],
+    tags=["html"],
     # dependencies=[Depends(get_token_header)],
     responses={404: {"description": "Not found"}},
 )

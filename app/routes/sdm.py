@@ -9,7 +9,7 @@ from app.utils import RedirectWithMessage, CustomTemplateResponse
 
 router = APIRouter(
     prefix="/sdm",
-    tags=["sdm"],
+    tags=["html"],
     # dependencies=[Depends(get_token_header)],
     responses={404: {"description": "Not found"}},
 )
