@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 from app import db_session
-from app.utils import oauth2_scheme, get_current_user, api_any_user, api_admin_only
+from app.utils import oauth2_scheme, api_any_user, api_admin_only
 from app.models import Penjualan, ItemPenjualan
 from app.schemas import CreatePenjualan, PenjualanInfo, ItemPenjualanInfo
 
@@ -18,14 +18,24 @@ router = APIRouter(
     dependencies=[Depends(api_any_user)],)
 async def index(
     type: str = None,
+    skip: int = 0,
+    limit: int = 100,
     db: Session = Depends(db_session)
 ) -> List[Penjualan]:
     if type == "order":
-        return db.query(Penjualan).filter(Penjualan.accepted == False).all()
+        return db.query(
+                Penjualan
+            ).filter(
+                Penjualan.accepted == False
+            ).offset(skip).limit(limit).all()
     elif type == "accepted":
-        return db.query(Penjualan).filter(Penjualan.accepted == True).all()
+        return db.query(
+                Penjualan
+            ).filter(
+                Penjualan.accepted == True
+            ).offset(skip).limit(limit).all()
     else:
-        return db.query(Penjualan).all()
+        return db.query(Penjualan).offset(skip).limit(limit).all()
 
 
 @router.get("/{penjualan_id}",

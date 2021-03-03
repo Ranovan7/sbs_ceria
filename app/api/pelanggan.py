@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app import db_session
-from app.utils import oauth2_scheme, get_current_user, api_any_user
+from app.utils import oauth2_scheme, api_any_user
 from app.models import Pelanggan
 
 router = APIRouter(
@@ -16,12 +16,18 @@ router = APIRouter(
 @router.get("/", dependencies=[Depends(api_any_user)])
 async def index(
     sales_id: int = None,
+    skip: int = 0,
+    limit: int = 100,
     db: Session = Depends(db_session)
 ) -> List[Pelanggan]:
     if sales_id:
-        return db.query(Pelanggan).filter(Pelanggan.sales_id == sales_id).all()
+        return db.query(
+                Pelanggan
+            ).filter(
+                Pelanggan.sales_id == sales_id
+            ).offset(skip).limit(limit).all()
     else:
-        return db.query(Pelanggan).all()
+        return db.query(Pelanggan).offset(skip).limit(limit).all()
 
 
 @router.get("/{pelanggan_id}", dependencies=[Depends(api_any_user)])

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 from app import db_session
-from app.utils import oauth2_scheme, get_current_user, api_any_user, api_admin_only
+from app.utils import oauth2_scheme, api_any_user, api_admin_only
 from app.models import Barang
 from app.schemas import CreateBarang
 
@@ -16,9 +16,11 @@ router = APIRouter(
 
 @router.get("/", dependencies=[Depends(api_any_user)])
 async def index(
+    skip: int = 0,
+    limit: int = 100,
     db: Session = Depends(db_session)
 ) -> List[Barang]:
-    return db.query(Barang).all()
+    return db.query(Barang).offset(skip).limit(limit).all()
 
 
 @router.get("/{barang_id}", dependencies=[Depends(api_any_user)])
