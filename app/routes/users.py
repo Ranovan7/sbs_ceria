@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends, Form, Cookie, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
 from app import templates
-from app.models import User
+from app.models import User, Sales
 from app.schemas import CreateSales, BaseUser
 from app.utils import db_session, current_user, admin_only, get_message
 from app.utils import RedirectWithMessage, CustomTemplateResponse
