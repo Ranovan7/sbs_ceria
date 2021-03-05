@@ -1,5 +1,7 @@
 # SBSehati
 
+## Backend
+
 1. Install Dependencies
     - create .venv directory
     - run
@@ -22,3 +24,14 @@
     - to start server using pipenv environment
     <br/>`# pipenv shell`
     <br/>`# uvicorn main:app --reload`
+
+## FrontEnd
+
+1. go to frontend directory
+    <br/>`# cd ./frontend/`
+
+2. Install Dependencies
+    <br/>`# npm install`
+
+3. Run Development
+    <br/>`# npm run dev`
