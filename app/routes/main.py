@@ -4,9 +4,10 @@ from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from app import templates
+from app import templates, oauth2_scheme
 from app.models import User
 from app.utils import db_session, current_user, login_required, authenticate_user
+from app.utils import api_any_user, get_current_user
 import datetime
 
 router = APIRouter(
@@ -72,6 +73,13 @@ async def login_for_access_token(
     user.last_login = datetime.datetime.now()
     db.commit()
     return {"access_token": user.create_access_token(), "token_type": "bearer"}
+
+
+@router.get("/info", dependencies=[Depends(oauth2_scheme), Depends(api_any_user)])
+async def user_info(
+    user = Depends(get_current_user)
+):
+    return {"username": user.username, "role": user.role_tag}
 
 
 @router.get("/logout", dependencies=[Depends(login_required)])
