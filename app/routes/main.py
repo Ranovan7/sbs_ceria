@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Request, Depends, Form, Response, status
+from fastapi import APIRouter, Request, Depends, Form, Response, HTTPException
+from fastapi import status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
