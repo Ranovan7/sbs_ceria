@@ -4,19 +4,32 @@
 	import Navbar from '$components/Navbar.svelte';
     import Notification from '$components/Notification.svelte';
 
-    export let page = "";
+    let page = "";
+    let user;
 
-    onMount(async () => {
+    onMount(() => {
         page = window.location.href.split('/')[3];
+        console.log(page);
         if (page != "login") {
-            authorizeUser();
+            authorizeUser(getAuthToken());
+
+            getJsonData(backend + "/info")
+                .then(data => {
+                    console.log(data);
+                    if (data.username) {
+                        user = data;
+                    } else {
+                        alert(data.detail);
+                    }
+                })
+                .catch(error => console.log(error));
         }
 	});
 </script>
 
 <main>
     {#if page != 'login'}
-    	<Navbar/>
+    	<Navbar user=user/>
     {/if}
 
     <!-- {#each notifications as notif}

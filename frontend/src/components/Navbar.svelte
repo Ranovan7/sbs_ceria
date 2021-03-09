@@ -1,5 +1,11 @@
 <script>
 
+    function logout() {
+        document.cookie = "auth_token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        window.location.href = '/login';
+    }
+
+    let user;
 </script>
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -47,9 +53,15 @@
      <div class="navbar-end">
        <div class="navbar-item">
          <div class="buttons">
-             <a class="button is-link is-light" href="/login">
-               Login
-             </a>
+            {#if user}
+                <a class="button is-link is-light" href="/login">
+                Login
+                </a>
+            {:else}
+                <a class="button is-warning is-light" href="#" on:click={logout}>
+                Logout
+                </a>
+            {/if}
          </div>
        </div>
      </div>

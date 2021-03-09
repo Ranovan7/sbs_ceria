@@ -1,7 +1,7 @@
 <script>
-    import { onMount } from 'svelte';
+    // import { onMount } from 'svelte';
 
-    console.log(user);
+    // console.log(user);
 
     function login() {
         let username = document.getElementsByName("username")[0].value;
@@ -9,9 +9,19 @@
 
         addNotif("Info Salah", "danger");
 
-        let logging_in = postData(backend + "/token");
-        console.log(logging_in);
+        postData(backend + "/token", {username: username, password: password})
+            .then(data => {
+                if (data.access_token) {
+                    setAuthToken(data.access_token);
+                    window.location.href = '/';
+                } else {
+                    alert(data.detail);
+                }
+            })
+            .catch(error => console.log(error));
     }
+
+    // let user = "";
 </script>
 
 <br>

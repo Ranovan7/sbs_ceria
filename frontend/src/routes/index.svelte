@@ -1,5 +1,23 @@
 <script>
 	import Counter from '$components/Counter.svelte';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+	    getJsonData(backend + "/info")
+			.then(data => {
+				console.log(data);
+				if (data.username) {
+					if (user.role != "admin") {
+						window.location.href = '/penjualan';
+					} else {
+						window.location.href = '/sdm';
+					}
+				} else {
+					alert(data.detail);
+				}
+			})
+			.catch(error => console.log(error));
+	});
 </script>
 
 <div align="center">
