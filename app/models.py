@@ -156,6 +156,8 @@ class Obat(Base):
     nama = Column(Text, nullable=False)
     jenis = Column(Text, nullable=False)  # btl, box, tube, dsb
 
+    barang = relationship("Barang", back_populates="obat")
+
 
 class Barang(Base):
     __tablename__ = "barang"
@@ -166,16 +168,10 @@ class Barang(Base):
     stock = Column(Integer, nullable=False, default=1)
 
     obat_id = Column(Integer, ForeignKey('obat.id'), nullable=True)
+    obat = relationship("Obat", back_populates="barang")
 
     __table_args__ = (UniqueConstraint('batch', 'expired_date', 'obat_id',
                                           name='barang_batch_date_obat'),)
-
-    @property
-    def obat(self):
-        db = SessionLocal()
-        obat = db.query(Obat).get(self.obat_id)
-        db.close()
-        return obat
 
 
 class Penjualan(Base):

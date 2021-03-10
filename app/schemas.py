@@ -117,6 +117,20 @@ class BaseObat(BaseModel):
     nama: str
     jenis: str
 
+    class Config:
+        orm_mode = True
+
+
+class BarangInfo(BaseModel):
+    batch: str
+    expired_date: datetime.date
+    stock: int
+    obat_id: int
+    obat: BaseObat
+
+    class Config:
+        orm_mode = True
+
 
 class BaseItemPenjualan(BaseModel):
     qty: int

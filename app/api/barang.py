@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from typing import List
 from app import db_session
 from app.utils import oauth2_scheme, api_any_user, api_admin_only
 from app.models import Barang
-from app.schemas import CreateBarang
+from app.schemas import CreateBarang, BarangInfo
 
 router = APIRouter(
     prefix="/barang",
@@ -14,12 +15,14 @@ router = APIRouter(
 )
 
 
-@router.get("/", dependencies=[Depends(api_any_user)])
+@router.get("/",
+    dependencies=[Depends(api_any_user)],
+    response_model=List[BarangInfo])
 async def index(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(db_session)
-) -> List[Barang]:
+) -> List[BarangInfo]:
     return db.query(Barang).offset(skip).limit(limit).all()
 
 
