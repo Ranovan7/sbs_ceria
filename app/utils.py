@@ -168,6 +168,7 @@ class APIRoleChecker:
 api_any_user = APIRoleChecker()
 api_admin_only = APIRoleChecker(['admin'])
 api_sales_only = APIRoleChecker(['sales'])
+api_admin_or_sales = APIRoleChecker(['admin', 'sales'])
 
 
 ### Dependencies End ###

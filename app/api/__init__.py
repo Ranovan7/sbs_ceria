@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api import obat, barang, pelanggan, penjualan, users
+from app.api import obat, barang, pelanggan, penjualan, sales, users
 
 router = APIRouter(
     prefix="/api",
@@ -8,6 +8,7 @@ router = APIRouter(
 )
 
 router.include_router(users.router)
+router.include_router(sales.router)
 router.include_router(obat.router)
 router.include_router(barang.router)
 router.include_router(pelanggan.router)
