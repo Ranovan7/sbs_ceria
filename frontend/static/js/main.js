@@ -18,6 +18,53 @@ function addNotif(message, type) {
     console.log(notifications);
 }
 
+function* iter_range(begin,end,step) {
+	// Normalize our inputs
+	step = step ? step : 1;
+
+	if (typeof(end) === 'undefined') {
+		end   = begin > 0 ? begin : 0;
+		begin = begin < 0 ? begin : 0;
+	}
+
+	if (begin == end) {
+		return;
+	}
+
+	if (begin > end) {
+		step = step * -1;
+	}
+
+	for (let x = begin; x < end; x += step) {
+		yield x;
+	}
+}
+
+function range(begin, end, step) {
+	return Array.from(iter_range(begin,end,step));
+}
+
+function toggleModal(id) {
+    var element = document.getElementById(id);
+    if (element.classList.contains('is-active')) {
+        console.log("toggleModal OFF");
+        element.classList.remove("is-active");
+        element.classList.remove("is-clipped");
+    } else {
+        console.log("toggleModal ON");
+        element.classList.add("is-active");
+        element.classList.add("is-clipped");
+    }
+}
+
+function getAttr(dict, key, attr) {
+    if (key in dict) {
+        return dict[key][attr];
+    } else {
+        return "-"
+    }
+}
+
 async function postData(url = '', data = {}) {
     const formData = new FormData();
     for ( let key in data ) {
