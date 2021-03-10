@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
 
     function logout() {
         document.cookie = "auth_token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
@@ -6,6 +7,19 @@
     }
 
     let user;
+
+    onMount(() => {
+        getJsonData(backend + "/info")
+            .then(data => {
+                console.log(data);
+                if (data.username) {
+                    user = data;
+                } else {
+                    alert(data.detail);
+                }
+            })
+            .catch(error => console.log(error));
+	});
 </script>
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -51,15 +65,21 @@
      </div>
 
      <div class="navbar-end">
+         {#if user}
+             <div class="navbar-item">
+                <div class="navbar-item">{ user.username } ({ user.role })</div>
+             </div>
+         {/if}
+
        <div class="navbar-item">
          <div class="buttons">
             {#if user}
-                <a class="button is-link is-light" href="/login">
-                Login
-                </a>
-            {:else}
                 <a class="button is-warning is-light" href="#" on:click={logout}>
                 Logout
+                </a>
+            {:else}
+                <a class="button is-link is-light" href="/login">
+                Login
                 </a>
             {/if}
          </div>

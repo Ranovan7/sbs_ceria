@@ -74,6 +74,7 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+
 function setAuthToken(token) {
     // console.log(token);
     setCookie('auth_token', token, 1);

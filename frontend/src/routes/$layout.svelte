@@ -4,8 +4,8 @@
 	import Navbar from '$components/Navbar.svelte';
     import Notification from '$components/Notification.svelte';
 
-    let page = "";
-    let user;
+    export let page = "";
+    export let user;
 
     onMount(() => {
         page = window.location.href.split('/')[3];
@@ -29,7 +29,7 @@
 
 <main>
     {#if page != 'login'}
-    	<Navbar user=user/>
+    	<Navbar />
     {/if}
 
     <!-- {#each notifications as notif}
