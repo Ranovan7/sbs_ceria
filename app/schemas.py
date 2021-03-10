@@ -122,6 +122,7 @@ class BaseObat(BaseModel):
 
 
 class BarangInfo(BaseModel):
+    id: int
     batch: str
     expired_date: datetime.date
     stock: int
