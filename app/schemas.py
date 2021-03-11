@@ -144,6 +144,9 @@ class ItemPenjualanInfo(BaseItemPenjualan):
     diskon: Optional[int] = None
     penjualan_id: int
 
+    class Config:
+        orm_mode = True
+
 
 class BasePenjualan(BaseModel):
     tgl: datetime.datetime
@@ -154,7 +157,7 @@ class BasePenjualan(BaseModel):
 class PenjualanInfo(BasePenjualan):
     id: int
     accepted: bool
-    # item_penjualan: List[ItemPenjualanInfo] = []
+    item_penjualan: List[ItemPenjualanInfo] = []
 
     class Config:
         orm_mode = True

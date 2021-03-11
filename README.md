@@ -6,9 +6,7 @@
     - create .venv directory
     - run
     <br/>`# pipenv install`
-    - create SECRET_KEY using
-    <br/>`# openssl rand -hex 32`
-    - duplicate .env-template to .env
+    - fill .env with format like .env-template
 
 2. Create Database and Admin
     - enter pipenv environment using command
@@ -34,4 +32,4 @@
     <br/>`# npm install`
 
 3. Run Development
-    <br/>`# npm run dev`
+    <br/>`# npm run dev -- --open`

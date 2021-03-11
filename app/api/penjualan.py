@@ -15,7 +15,8 @@ router = APIRouter(
 
 
 @router.get("/",
-    dependencies=[Depends(api_any_user)],)
+    dependencies=[Depends(api_any_user)],
+    response_model=List[PenjualanInfo])
 async def index(
     type: str = None,
     skip: int = 0,
@@ -43,7 +44,8 @@ async def index(
 
 
 @router.get("/{penjualan_id}",
-    dependencies=[Depends(api_any_user)])
+    dependencies=[Depends(api_any_user)],
+    response_model=PenjualanInfo)
 async def get_penjualan(
     penjualan_id: int,
     db: Session = Depends(db_session)
@@ -52,7 +54,8 @@ async def get_penjualan(
 
 
 @router.post("/",
-    dependencies=[Depends(api_any_user)])
+    dependencies=[Depends(api_any_user)],
+    response_model=PenjualanInfo)
 async def add_penjualan(
     penjualan: CreatePenjualan,
     db: Session = Depends(db_session)
@@ -65,6 +68,7 @@ async def add_penjualan(
     db.add(new_penjualan)
     db.commit()
     db.refresh(new_penjualan)
+    print("penjualan added")
 
     for item in penjualan.item_penjualan:
         new_item = ItemPenjualan(
@@ -74,6 +78,8 @@ async def add_penjualan(
         )
         db.add(new_item)
         db.commit()
+
+    print("returning penjualan")
 
     return new_penjualan
 
