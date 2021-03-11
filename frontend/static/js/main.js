@@ -65,14 +65,11 @@ function getAttr(dict, key, attr) {
     }
 }
 
-async function postData(url = '', data = {}) {
-    const formData = new FormData();
-    for ( let key in data ) {
-        formData.append(key, data[key]);
-    }
+async function postData(url = '', data, withAuth = true) {
+    // data has to be formData
     const response = await fetch(url, {
         method: 'POST',
-        body: formData
+        body: data
     });
 
     return response.json();
@@ -93,15 +90,11 @@ async function getJsonData(url = '') {
 async function postJsonData(url = '', data = {}) {
     const response = await fetch(url, {
         method: 'POST',
-        mode: 'no-cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + getAuthToken(),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`,
         },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
     });
 

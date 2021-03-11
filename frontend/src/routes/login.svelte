@@ -9,7 +9,11 @@
 
         addNotif("Info Salah", "danger");
 
-        postData(backend + "/token", {username: username, password: password})
+        let formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+
+        postData(backend + "/token", formData, false)
             .then(data => {
                 if (data.access_token) {
                     setAuthToken(data.access_token);

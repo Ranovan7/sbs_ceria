@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
-    import Modal from '$components/Modal.svelte'
+    // import Modal from '$components/Modal.svelte'
 
     let penjualan;
     let pelanggan = {};
@@ -27,28 +27,67 @@
     }
 
     function addOrder() {
-        formOrder['sales_id'] = getSalesId();
+        let date = new Date(formOrder['tgl']);
+        // let formData = new FormData();
+        // formData.append('sales_id', username);
+        // formData.append('pelanggan_id', username);
+        // formData.append('tgl', username);
+        let order = {
+            sales_id: getSalesId(),
+            pelanggan_id: parseInt(document.getElementById(`pelanggan`).value),
+            tgl: date.toISOString()
+        }
+
         let barangs = [];
         let i = 0;
         while (true) {
-            let barang_id = document.getElementById(`barang-${i}`).value;
-            let qty = document.getElementById(`qty-${i}`).value;
-            console.log(`${barang_id}-${qty}`);
+            let barang_id = document.getElementById(`barang-${i}`);
+            let qty = document.getElementById(`qty-${i}`);
+
             if (!barang_id) {
                 break;
             }
+
             barangs.push({
-                barang_id: barang_id,
-                qty: qty
+                barang_id: parseInt(barang_id.value),
+                qty: parseInt(qty.value)
             });
             i += 1;
         }
-        formOrder['item_penjualan'] = barangs;
+        order['item_penjualan'] = barangs;
 
-        console.log(formOrder);
+        console.log(order);
+        postJsonData(backend + "/api/penjualan", order)
+            .then(data => {
+                console.log(data);
+                if (data.id) {
+                    alert("Success");
+                    penjualan.push(data);
+                    penjualan = penjualan;
+
+                    toggleModal('penjualanForm');
+                } else {
+                    alert(data.detail);
+                }
+            })
+            .catch(error => console.log(error));
      }
 
     onMount(() => {
+        getJsonData(backend + "/info")
+            .then(data => {
+                console.log(data);
+                if (data.username) {
+                    if (data.role != "sales") {
+                        console.log("You're not Sales");
+                        window.location.href = '/sdm';
+                    }
+                } else {
+                    alert(data.detail);
+                }
+            })
+            .catch(error => console.log(error));
+
         getJsonData(backend + "/api/penjualan")
             .then(data => {
                 // console.log(data);
@@ -66,9 +105,9 @@
                 if (data) {
                     data.forEach(function(d) {
                         pelanggan[d.id] = d;
-                        console.log(Object.values(pelanggan));
+                        // console.log(Object.values(pelanggan));
                     });
-                    console.log(pelanggan);
+                    // console.log(pelanggan);
                 } else {
                     alert(data.detail);
                 }
@@ -123,7 +162,7 @@
                 <div class="is-four-fifths pt-2 pb-2" style="z-index: 10000">
                   <label class="label" for="pelanggan">Pelanggan</label>
                   <div class="select is-link">
-                    <select id="pelanggan" name="pelanggan" class="is-link"  bind:value={formOrder.pelanggan_id}>
+                    <select id="pelanggan" name="pelanggan" class="is-link">
                       {#each Object.values(pelanggan) as p}
                         <option value="{p.id}">{p.nama}</option>
                       {/each}
