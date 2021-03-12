@@ -1,7 +1,9 @@
 
 
-var backend = "http://localhost:8000";
-// var backend = "https://app.sbsehati.co.id";
+let backend = {};
+const config = getConfig().then(data => {
+    backend = data['backend'];
+});
 var user = {
     'username': null,
     'role': null
@@ -16,6 +18,17 @@ function addNotif(message, type) {
     }];
     notifications = notifications;
     console.log(notifications);
+}
+
+async function getConfig() {
+    const configStr = document.getElementById("config");
+    let jsonRes = await fetch(configStr.src, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+    });
+    return jsonRes.json();
 }
 
 function* iter_range(begin,end,step) {
@@ -139,7 +152,7 @@ function authorizeUser(auth_token) {
     if (auth_token) {
         getJsonData(backend + "/info")
     		.then(data => {
-    			console.log(data);
+    			// console.log(data);
     			if (!data.username) {
     				window.location.href = '/login';
     			}

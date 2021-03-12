@@ -31,5 +31,10 @@
 2. Install Dependencies
     <br/>`# npm install`
 
-3. Run Development
+3. Copy frontend/static/config_template.json to frontend/static/config.json
+
+4. Run Development
     <br/>`# npm run dev -- --open`
+
+5. Build FrontEnd Files
+    <br/>`# npm run build`
