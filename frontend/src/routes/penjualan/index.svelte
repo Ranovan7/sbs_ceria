@@ -8,6 +8,7 @@
     let sales = {};
     let barang = [];
     let nbarang = 1;
+    let formBarang = [];
     let formOrder = {
         tgl: '2021-01-01',
         pelanggan_id: '',
@@ -74,6 +75,7 @@
      }
 
     onMount(() => {
+        formBarang = range(0, nbarang, 1);
         getJsonData(backend + "/info")
             .then(data => {
                 console.log(data);
@@ -169,7 +171,7 @@
                     </select>
                   </div>
                 </div>
-                {#each range(0, nbarang, 1) as i}
+                {#each formBarang as i}
                     <div class="columns pt-2 pb-2">
                         <div class="column is-four-fifth" style="z-index: 10000">
                           <label class="label" for="barang-{i}">Barang</label>
