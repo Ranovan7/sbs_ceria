@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from app import templates
 
 router = APIRouter(
-    prefix="/sdm",
+    prefix="/penjualan",
     tags=["html"],
     responses={404: {"description": "Not found"}},
 )
@@ -10,4 +10,4 @@ router = APIRouter(
 
 @router.get("/")
 async def index(request: Request):
-    return templates.TemplateResponse("sdm/index.html", {'request': request})
+    return templates.TemplateResponse("penjualan/index.html", {'request': request})

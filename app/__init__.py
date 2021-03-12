@@ -23,7 +23,9 @@ app = FastAPI(
     title="SBSehati",
     description="api documentations",
     version="0.1.0")
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+# app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="./frontend/build"), name="static")
+app.mount("/_app", StaticFiles(directory="./frontend/build/_app"), name="_app")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -37,7 +39,8 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
-templates = Jinja2Templates(directory="./app/templates")
+# templates = Jinja2Templates(directory="./app/templates")
+templates = Jinja2Templates(directory="./frontend/build")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -57,16 +60,12 @@ def db_session():
 
 # Routes
 from app.routes import main
-from app.routes import users
 from app.routes import sdm
-from app.routes import sales
-# from app.routes import produk
+from app.routes import penjualan
 from app import api
 
 
 app.include_router(main.router)
-app.include_router(users.router)
 app.include_router(sdm.router)
-app.include_router(sales.router)
-# app.include_router(produk.router)
+app.include_router(penjualan.router)
 app.include_router(api.router)

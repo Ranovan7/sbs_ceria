@@ -18,18 +18,14 @@ router = APIRouter(
 )
 
 
-@router.get("/", dependencies=[Depends(login_required)])
-async def index(request: Request, user=Depends(current_user)):
-    if user.role_tag == 'admin':
-        return RedirectResponse("/sdm")
-    elif user.role_tag == 'sales':
-        return RedirectResponse("/sales")
-    return templates.TemplateResponse("main/index.html", {"request": request, 'user': user})
+@router.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @router.get("/login")
 async def login_get(request: Request, message_text: str = None, message_type: str = None):
-    return templates.TemplateResponse("main/login.html", {
+    return templates.TemplateResponse("login/index.html", {
         "request": request,
         "message_text": message_text,
         "message_type": message_type})
