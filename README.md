@@ -38,3 +38,7 @@
 
 5. Build FrontEnd Files
     <br/>`# npm run build`
+
+6. Once Built, running backend/FastAPI will serve both frontend (/<page>) and api (/api/<service>) endpoint, so running only
+    </br>`# pipenv run uvicorn main:app --reload`</br>
+    will run the complete app
