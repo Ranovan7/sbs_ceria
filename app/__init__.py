@@ -3,6 +3,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import RequestValidationError
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,12 +15,24 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 origins = ["*"]
 
+
+async def not_found(request, exc):
+    if request.url.path.split("/")[1] == "api":
+        return JSONResponse(content={'detail': "API not Found"})
+    return RedirectResponse("/")
+
+
+exception_handlers = {
+    404: not_found,
+}
+
 app = FastAPI(
     docs_url="/docs",
     redoc_url=None,
     title="SBSehati",
     description="api documentations",
-    version="0.1.0")
+    version="0.1.0",
+    exception_handlers=exception_handlers)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.mount("/client",
     StaticFiles(directory="./spa/__sapper__/export/client"),
@@ -58,12 +71,8 @@ def db_session():
 
 # Routes
 from app.routes import main
-from app.routes import sdm
-from app.routes import penjualan
 from app import api
 
 
-app.include_router(main.router)
-# app.include_router(sdm.router)
-# app.include_router(penjualan.router)
 app.include_router(api.router)
+app.include_router(main.router)
