@@ -25,7 +25,7 @@
 
 ## FrontEnd
 
-1. go to frontend directory
+1. go to spa directory
     <br/>`# cd ./spa/`
 
 2. Install Dependencies
@@ -36,9 +36,9 @@
 4. Run Development
     <br/>`/spa # npm run dev`
 
-5. Build FrontEnd Files
+5. Build FrontEnd/SPA Static Files
     <br/>`/spa # npx sapper export`
 
-6. Once Built, running backend/FastAPI will serve both frontend (/<page>) and api (/api/<service>) endpoint, so running only
+6. Once Built, running backend/FastAPI will serve both frontend (/<page>) and api (/api/<service>) endpoint, so running code below on development
     </br>`# pipenv run uvicorn main:app --reload`</br>
     will run the complete app
