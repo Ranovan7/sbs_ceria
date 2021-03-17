@@ -1,5 +1,5 @@
 <script>
-	import successkid from 'images/successkid.jpg';
+	// import successkid from 'images/successkid.jpg';
 	import { goto, stores } from '@sapper/app';
 
     const { session } = stores();
@@ -58,11 +58,4 @@
 	<title>Homepage</title>
 </svelte:head>
 
-<h1>Gureto daze!</h1>
-
-<figure>
-	<img alt="Success Kid" src="{successkid}">
-	<figcaption>Have fun with Sapper!</figcaption>
-</figure>
-
-<p><strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong></p>
+<h1>SBSEHATI</h1>
