@@ -20,9 +20,10 @@ app = FastAPI(
     title="SBSehati",
     description="api documentations",
     version="0.1.0")
-# app.mount("/static", StaticFiles(directory="app/static"), name="static")
-app.mount("/static", StaticFiles(directory="./frontend/build"), name="static")
-app.mount("/_app", StaticFiles(directory="./frontend/build/_app"), name="_app")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/client",
+    StaticFiles(directory="./spa/__sapper__/export/client"),
+    name="client")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -37,7 +38,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
 # templates = Jinja2Templates(directory="./app/templates")
-templates = Jinja2Templates(directory="./frontend/build")
+templates = Jinja2Templates(directory="./spa/__sapper__/export")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -63,6 +64,6 @@ from app import api
 
 
 app.include_router(main.router)
-app.include_router(sdm.router)
-app.include_router(penjualan.router)
+# app.include_router(sdm.router)
+# app.include_router(penjualan.router)
 app.include_router(api.router)

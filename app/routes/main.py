@@ -23,12 +23,12 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@router.get("/login")
-async def login_get(request: Request, message_text: str = None, message_type: str = None):
-    return templates.TemplateResponse("login/index.html", {
-        "request": request,
-        "message_text": message_text,
-        "message_type": message_type})
+# @router.get("/login")
+# async def login_get(request: Request, message_text: str = None, message_type: str = None):
+#     return templates.TemplateResponse("login/index.html", {
+#         "request": request,
+#         "message_text": message_text,
+#         "message_type": message_type})
 
 
 @router.post("/login")

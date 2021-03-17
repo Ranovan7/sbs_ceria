@@ -26,18 +26,18 @@
 ## FrontEnd
 
 1. go to frontend directory
-    <br/>`# cd ./frontend/`
+    <br/>`# cd ./spa/`
 
 2. Install Dependencies
-    <br/>`# npm install`
+    <br/>`/spa # npm install`
 
-3. Copy frontend/static/config_template.json to frontend/static/config.json
+3. Copy spa/.env-template to spa/.env
 
 4. Run Development
-    <br/>`# npm run dev -- --open`
+    <br/>`/spa # npm run dev`
 
 5. Build FrontEnd Files
-    <br/>`# npm run build`
+    <br/>`/spa # npx sapper export`
 
 6. Once Built, running backend/FastAPI will serve both frontend (/<page>) and api (/api/<service>) endpoint, so running only
     </br>`# pipenv run uvicorn main:app --reload`</br>
