@@ -23,7 +23,7 @@
     <br/>`# pipenv shell`
     <br/>`# uvicorn main:app --reload`
 
-## FrontEnd
+## Frontend
 
 1. go to spa directory
     <br/>`# cd ./spa/`
