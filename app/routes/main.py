@@ -31,26 +31,26 @@ async def index(request: Request):
 #         "message_type": message_type})
 
 
-@router.post("/login")
-async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db_session)):
-    user = db.query(User).filter(User.username == form_data.username).first()
-
-    if not user:
-        return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
-
-    if user.verify_password(form_data.password):
-        # update user last_login
-        user.last_login = datetime.datetime.now()
-        db.commit()
-
-        response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
-        response.set_cookie(key="token", value=user.create_access_token())
-        response.set_cookie(
-            key="Authorization",
-            value=f"Bearer {user.create_access_token()}")
-        return response
-    else:
-        return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+# @router.post("/login")
+# async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db_session)):
+#     user = db.query(User).filter(User.username == form_data.username).first()
+#
+#     if not user:
+#         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+#
+#     if user.verify_password(form_data.password):
+#         # update user last_login
+#         user.last_login = datetime.datetime.now()
+#         db.commit()
+#
+#         response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
+#         response.set_cookie(key="token", value=user.create_access_token())
+#         response.set_cookie(
+#             key="Authorization",
+#             value=f"Bearer {user.create_access_token()}")
+#         return response
+#     else:
+#         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
 
 
 @router.post("/token")

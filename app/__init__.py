@@ -19,7 +19,7 @@ origins = ["*"]
 async def not_found(request, exc):
     if request.url.path.split("/")[1] == "api":
         return JSONResponse(content={'detail': "API not Found"})
-    return RedirectResponse("/")
+    return RedirectResponse(f"/#{request.url.path}")
 
 
 exception_handlers = {
@@ -33,10 +33,9 @@ app = FastAPI(
     description="api documentations",
     version="0.1.0",
     exception_handlers=exception_handlers)
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-app.mount("/client",
-    StaticFiles(directory="./spa/__sapper__/export/client"),
-    name="client")
+# app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="frontend/public/static"), name="static")
+app.mount("/build", StaticFiles(directory="frontend/public/build"), name="build")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -51,7 +50,8 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
 # templates = Jinja2Templates(directory="./app/templates")
-templates = Jinja2Templates(directory="./spa/__sapper__/export")
+# templates = Jinja2Templates(directory="./spa/__sapper__/export")
+templates = Jinja2Templates(directory="./frontend/public")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
