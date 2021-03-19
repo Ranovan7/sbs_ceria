@@ -26,19 +26,19 @@
 ## Frontend
 
 1. go to spa directory
-    <br/>`# cd ./spa/`
+    <br/>`# cd ./frontend/`
 
 2. Install Dependencies
-    <br/>`/spa # npm install`
+    <br/>`/frontend # npm install`
 
-3. Copy spa/.env-template to spa/.env
+3. Environtment Variables <pending>
 
 4. Run Development
-    <br/>`/spa # npm run dev`
+    <br/>`/frontend # npm run dev`
 
-5. Build FrontEnd/SPA Static Files
-    <br/>`/spa # npx sapper export`
+5. Build Frontend/SPA Static Files
+    <br/>`/frontend # npm run build`
 
-6. Once Built, running backend/FastAPI will serve both frontend (/<page>) and api (/api/<service>) endpoint, so running code below on development
+6. Once Built, running backend/FastAPI will serve both frontend (/) and api (/api/<service>) endpoint, so running code below on development
     </br>`# pipenv run uvicorn main:app --reload`</br>
     will run the complete app
