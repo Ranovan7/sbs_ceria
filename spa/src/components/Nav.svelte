@@ -33,13 +33,14 @@
   <div id="navbarMain" class="navbar-menu">
      <div class="navbar-start">
        <a class="navbar-item" aria-current="{segment === undefined ? 'page' : undefined}" href=".">Dashboard</a>
-       <a class="navbar-item" aria-current="{segment === 'sdm' ? 'page' : undefined}" href="sdm">
+	   <a class="navbar-item" rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">Blog</a>
+       <a class="navbar-item" rel=prefetch aria-current="{segment === 'sdm' ? 'page' : undefined}" href="sdm">
          SDM
        </a>
        <div class="navbar-item has-dropdown is-hoverable">
          <a class="navbar-link" href="#">Transaksi</a>
          <div class="navbar-dropdown">
-           <a class="navbar-item" aria-current="{segment === 'penjualan' ? 'page' : undefined}" href="penjualan">Penjualan</a>
+           <a class="navbar-item" rel=prefetch aria-current="{segment === 'penjualan' ? 'page' : undefined}" href="penjualan">Penjualan</a>
            <a class="navbar-item">Pembelian</a>
          </div>
        </div>

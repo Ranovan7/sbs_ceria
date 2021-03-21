@@ -1,3 +1,9 @@
+<script context="module">
+    export function preload(page, session) {
+        // return { path: page.path }
+    }
+</script>
+
 <script>
     import { goto, stores } from '@sapper/app';
 
@@ -15,12 +21,6 @@
 	// 		goto(`/sdm`);
 	// 	}
     // }
-
-	export function preload() {
-		// return this.fetch(`penjualan.json`).then(r => r.json()).then(posts => {
-		// 	return { posts };
-		// });
-	}
 </script>
 
 <style>

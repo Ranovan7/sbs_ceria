@@ -6,14 +6,14 @@
     const { session, page } = stores();
     const { user, BACKEND } = $session;
 	const permissions = {
-		admin: ["/sdm"],
-		sales: ["/penjualan"],
+		admin: ["/sdm", "/blog"],
+		sales: ["/penjualan", "/blog"],
 	}
 
 	afterUpdate(() => {
 		console.log($page.path);
 		if ($page.path != "/login") {
-      		checkPage($session.user);
+      		// checkPage($session.user);
 		}
 	})
 
