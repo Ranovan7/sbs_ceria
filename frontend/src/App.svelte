@@ -1,23 +1,24 @@
 <script>
+	import "./css/bulma.min.css";
+
 	import Router from 'svelte-spa-router';
+	import { onDestroy, onMount } from 'svelte';
+    import { location } from 'svelte-spa-router';
+
 	import routes from './routes';
+	import Nav from './components/Nav.svelte';
 </script>
 
-<main>
-	<Router {routes} />
-</main>
-
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
 </style>
+
+<main>
+	{#if $location != '/login'}
+		<Nav />
+	{/if}
+
+	<div class="container">
+		<Router {routes} />
+	</div>
+</main>

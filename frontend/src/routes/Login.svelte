@@ -1,0 +1,36 @@
+<script>
+    let username;
+    let password;
+</script>
+
+<br>
+<br>
+
+<div class="columns">
+  <div class="column">
+
+  </div>
+  <div class="column">
+    <div class="container box">
+      <h1 class="title">
+        SBSehati
+      </h1>
+      <form method="post">
+        <div class="pt-2 pb-2">
+          <label class="label" for="username">Username</label>
+          <input class="input is-primary" type="text" name="username" bind:value="{username}">
+        </div>
+        <div class="pt-2 pb-2">
+          <label class="label" for="password">Password</label>
+          <input class="input is-primary" type="password" name="password" bind:value="{password}">
+        </div>
+        <div class="pt-2 pb-2">
+          <input class="button is-link" type="submit" value="Login">
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="column">
+
+  </div>
+</div>
