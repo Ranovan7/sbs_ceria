@@ -3,6 +3,10 @@
     let password;
 </script>
 
+<svelte:head>
+    <title>SBSehati - Login</title>
+</svelte:head>
+
 <br>
 <br>
 

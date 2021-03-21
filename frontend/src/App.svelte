@@ -13,6 +13,10 @@
 
 </style>
 
+<svelte:head>
+    <title>SBSehati</title>
+</svelte:head>
+
 <main>
 	{#if $location != '/login'}
 		<Nav />
