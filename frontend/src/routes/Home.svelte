@@ -1,12 +1,22 @@
-<h1>Hello world!</h1>
-<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-<p>
-    This template is pre-configured with svlete-spa-router for routing.<br/>
-    Visit the <a href="https://github.com/ItalyPaleAle/svelte-spa-router">documentation for the router</a> to learn more.
-</p>
-<p>
-    <a href="#/lorem/2">Lorem ipsum</a>
-</p>
+<script>
+    import { beforeUpdate } from 'svelte';
+    import { replace } from 'svelte-spa-router';
+    import { user } from '../stores';
+
+    beforeUpdate(() => {
+		if ($user.role == 'admin') {
+            console.log("is Admin");
+            replace("/sdm");
+        } else if ($user.role == 'sales') {
+            console.log("is Sales");
+            replace("/penjualan");
+        }
+	});
+</script>
+
+<div align="center">
+    <h1>SBSEHATI APP</h1>
+</div>
 
 <style>
 	h1 {
