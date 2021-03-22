@@ -1,4 +1,35 @@
 <script>
+    import { postData, getJsonData, setAuthToken } from '../utils';
+    import { backend, user } from '../stores';
+    import { replace } from 'svelte-spa-router';
+
+    function login() {
+        let formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+
+        postData($backend + "/token", formData)
+            .then(result => {
+                if (result.access_token) {
+                    setAuthToken(result.access_token);
+
+                    getJsonData($backend + "/info")
+                        .then(user_info => {
+                            if (user_info.username) {
+                                $user = user_info;
+                                console.log($user);
+                                replace("/");
+                            } else {
+                                alert(user_info.detail);
+                            }
+                        });
+                } else {
+                    console.log(result.detail);
+                    alert(result.detail);
+                }
+            });
+    }
+
     let username;
     let password;
 </script>
@@ -19,7 +50,6 @@
       <h1 class="title">
         SBSehati
       </h1>
-      <form method="post">
         <div class="pt-2 pb-2">
           <label class="label" for="username">Username</label>
           <input class="input is-primary" type="text" name="username" bind:value="{username}">
@@ -29,9 +59,9 @@
           <input class="input is-primary" type="password" name="password" bind:value="{password}">
         </div>
         <div class="pt-2 pb-2">
-          <input class="button is-link" type="submit" value="Login">
+          <!-- <input class="button is-link" type="submit" value="Login"> -->
+          <button class="button is-link" on:click={login}>Login</button>
         </div>
-      </form>
     </div>
   </div>
   <div class="column">

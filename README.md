@@ -31,7 +31,7 @@
 2. Install Dependencies
     <br/>`/frontend # npm install`
 
-3. Environtment Variables <pending>
+3. Copy /frontend/.env-template to /frontend/.env, and change it's content accordingly
 
 4. Run Development
     <br/>`/frontend # npm run dev`

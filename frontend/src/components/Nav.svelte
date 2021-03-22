@@ -1,6 +1,12 @@
 <script>
-    let username;
-    let password;
+    import { user } from '../stores';
+    import { replace } from 'svelte-spa-router';
+
+    function logout() {
+        document.cookie = "auth_token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+		console.log("Logout");
+        replace("/login");
+    }
 </script>
 
 <style>
@@ -52,12 +58,15 @@
      <div class="navbar-end">
        <div class="navbar-item">
          <div class="buttons">
-			 <a class="button is-link is-light" href="#/login">
-			 Login
-			 </a>
-			 <!-- <button class="button is-secondary is-light" on:click="{logout}">
-			 Logout
-			 </button> -->
+            {#if !$user}
+                <a class="button is-link is-light" href="#/login">
+                Login
+                </a>
+            {:else}
+                <button class="button is-secondary is-light" on:click="{logout}">
+                Logout
+                </button>
+            {/if}
          </div>
        </div>
      </div>
