@@ -40,7 +40,8 @@ async def index(
                 Penjualan.sales_id == sales.id
             )
 
-    return query.offset(skip).limit(limit).all()
+    # query = query.offset(skip).limit(limit)
+    return query.all()
 
 
 @router.get("/{penjualan_id}",

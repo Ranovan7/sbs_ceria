@@ -19,7 +19,9 @@ async def index(
     limit: int = 100,
     db: Session = Depends(db_session)
 ) -> List[Obat]:
-    return db.query(Obat).offset(skip).limit(limit).all()
+    query = db.query(Obat)
+    # query = query.offset(skip).limit(limit)
+    return query.all()
 
 
 @router.get("/{obat_id}", dependencies=[Depends(api_any_user)])

@@ -23,7 +23,9 @@ async def index(
     limit: int = 100,
     db: Session = Depends(db_session)
 ) -> List[BarangInfo]:
-    return db.query(Barang).offset(skip).limit(limit).all()
+    query = db.query(Barang)
+    # query = query.offset(skip).limit(limit)
+    return query.all()
 
 
 @router.get("/{barang_id}", dependencies=[Depends(api_any_user)])

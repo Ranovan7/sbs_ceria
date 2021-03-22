@@ -23,7 +23,9 @@ async def index(
     query = db.query(Sales)
     if user.role_tag == "sales":
         query = query.filter(Sales.user_id == user.id)
-    return query.offset(skip).limit(limit).all()
+
+    # query = query.offset(skip).limit(limit)
+    return query.all()
 
 
 @router.get("/{sales_id}", dependencies=[Depends(api_admin_only)])

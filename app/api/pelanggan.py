@@ -21,13 +21,16 @@ async def index(
     db: Session = Depends(db_session)
 ) -> List[Pelanggan]:
     if sales_id:
-        return db.query(
+        query = db.query(
                 Pelanggan
             ).filter(
                 Pelanggan.sales_id == sales_id
-            ).offset(skip).limit(limit).all()
+            )
     else:
-        return db.query(Pelanggan).offset(skip).limit(limit).all()
+        query = db.query(Pelanggan)
+
+    # query = query.offset(skip).limit(limit)
+    return query.all()
 
 
 @router.get("/{pelanggan_id}", dependencies=[Depends(api_any_user)])
