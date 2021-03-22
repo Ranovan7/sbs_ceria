@@ -56,6 +56,9 @@
      </div>
 
      <div class="navbar-end">
+        <div class="navbar-item">
+            <p>{$user.username} ({$user.role})</p>
+        </div>
        <div class="navbar-item">
          <div class="buttons">
             {#if !$user}

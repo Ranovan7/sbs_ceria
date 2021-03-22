@@ -1,9 +1,9 @@
 <script>
-    import { beforeUpdate } from 'svelte';
+    import { onMount } from 'svelte';
     import { replace } from 'svelte-spa-router';
     import { user } from '../stores';
 
-    beforeUpdate(() => {
+    onMount(() => {
         if ($user.role != 'admin') {
             console.log("not Admin");
             replace("/");

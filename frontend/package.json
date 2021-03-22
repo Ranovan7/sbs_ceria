@@ -18,7 +18,9 @@
     "svelte-preprocess": "^4.6.9"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "dotenv": "^8.2.0",
+    "moment": "^2.29.1",
     "svelte-spa-router": "^3.0.4"
   }
 }
