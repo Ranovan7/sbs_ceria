@@ -73,6 +73,7 @@ class Sales(Base):
     keterangan = Column(Text)
 
     user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    user = relationship("User", lazy='joined')
 
     @property
     def user(self):

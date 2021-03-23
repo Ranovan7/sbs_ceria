@@ -1,72 +1,109 @@
 
-
-function formToJson(form){
-    let data = new FormData(form);
-    let results = {};
-
-    for (let key of data.keys()) {
-  	   results[key] = data.get(key);
-  	}
-
-    return results;
-}
-
-function toggleModal(id, callback) {
-  var element = document.getElementById(id);
-  if (element.classList.contains('is-active')) {
-    element.classList.remove("is-active");
-    element.classList.remove("is-clipped");
-  } else {
-    element.classList.add("is-active");
-    element.classList.add("is-clipped");
-
-    if (callback) {
-      callback();
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
-  }
+    return "";
 }
 
-function toggleCollapsible(id, callback) {
-  var element = document.getElementById(id);
-  if (element.classList.contains('collapse')) {
-    element.classList.add("show");
-    element.classList.remove("collapse");
-    console.log("Show Collapsible");
-  } else {
-    element.classList.add("collapse");
-    element.classList.remove("show");
-
-    if (callback) {
-      callback();
-    }
-  }
-}
-
-function sendPostRequest(endpoint, data, callback){
-  fetch(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
-      }
-    }).then(function (response) {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(response);
-    }).then(function (data) {
-      console.log(data);
-      callback(data);
-    }).catch(function (error) {
-      console.warn('Something went wrong.', error);
+async function postData(url = '', data) {
+    // data has to be formData
+    const response = await fetch(url, {
+        method: 'POST',
+        body: data
     });
+
+    const result = await response.json();
+
+    return result;
 }
 
-function showMessage(message, type) {
-  var elem = document.getElementById('notification');
+async function getJsonData(url = '') {
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getAuthToken()}`,
+        },
+    });
+
+    const result = await response.json();
+
+    return result;
 }
 
-function closeNotification(id) {
-  notif = document.getElementById(id);
-  notif.parentNode.remove(notif);
+async function postJsonData(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    return result;
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookies() {
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    return ca;
+}
+
+function setAuthToken(token) {
+    // console.log(token);
+    setCookie('auth_token', token, 1);
+}
+
+function getAuthToken() {
+    let name = "auth_token=";
+    let ca = getCookies();
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function closeModalEl(modal_id) {
+    // const modal = new bootstrap.Modal(document.getElementById(modal_id));
+    // modal.hide();
+
+    let modal = document.getElementById(modal_id);
+    modal.classList.remove("show");
+    modal.style.display = 'none';
+    modal.removeAttribute("role");
+    modal.removeAttribute("aria-modal");
+    modal.setAttribute("aria-hidden", "true");
+
+    let backdrops = document.getElementsByClassName("modal-backdrop");
+    for (let el of backdrops) {
+        console.log(el);
+        el.parentNode.removeChild(el);
+    }
 }

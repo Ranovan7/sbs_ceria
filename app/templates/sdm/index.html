@@ -9,212 +9,243 @@
 {% endblock %}
 
 {% block content %}
-  <div>
-    <div class="container">
+  <div id="sdm">
+    <div>
       <h1 class="title">
         Sales
-        <small>
+        <!-- <small>
           <a href="#" onclick="toggle_create_user()">
             <i class="fa fa-sm fa-plus"></i>
           </a>
-        </small>
+        </small> -->
       </h1>
-      <div class="modal" id="create-sales">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <form action="/users/sales" method="post">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Tambah Sales</p>
-              <button class="delete" type="button" aria-label="close" onclick="toggle_create_user()"></button>
-            </header>
-            <section class="modal-card-body">
-              <div class="columns">
-                <div class="column is-four-fifths pt-2 pb-2">
-                  <label class="label" for="username">Nama</label>
-                  <input class="input is-link" type="text" name="nama" value="" required>
-                </div>
-                <div class="column pt-2 pb-2">
-                  <label class="label" for="username">Kode</label>
-                  <input class="input is-link" type="text" name="kode" value="" required>
-                </div>
-              </div>
-              <div class="columns">
-                <div class="column pt-2 pb-2">
-                  <label class="label" for="username">Username</label>
-                  <input class="input is-link" type="text" name="username" value="" required>
-                </div>
-                <div class="column pt-2 pb-2">
-                  <label class="label" for="password">Password</label>
-                  <input class="input is-link" type="password" name="password" value="" required>
-                </div>
-              </div>
-              <div class="columns">
-                <div class="column is-three-quarters pt-2 pb-2">
-                  <label class="label" for="username">Alamat</label>
-                  <input class="input is-link" type="text" name="alamat" placeholder="(tidak wajib)">
-                </div>
-                <div class="column pt-2 pb-2">
-                  <label class="label" for="username">Kota</label>
-                  <input class="input is-link" type="text" name="kota" placeholder="(tidak wajib)">
-                </div>
-              </div>
-              <div class="columns">
-                <div class="column pt-2 pb-2">
-                  <label class="label" for="username">Telepon</label>
-                  <input class="input is-link" type="text" name="telepon" placeholder="(tidak wajib)">
-                </div>
-                <div class="column is-three-fifths pt-2 pb-2">
-                  <label class="label" for="username">Keterangan</label>
-                  <input class="input is-link" type="text" name="keterangan" placeholder="(tidak wajib)">
-                </div>
-              </div>
-            </section>
-            <footer class="modal-card-foot">
-              <div class="pl-2 pr-2">
-                <input class="button is-link" type="submit" value="Tambah">
-              </div>
-              <button class="button" type="button" onclick="toggle_create_user()">Batal</button>
-            </footer>
-          </form>
-        </div>
-      </div>
     </div>
-    <div class="container">
-      <table class="table is-bordered">
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Username</th>
-            <th>Telepon</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for sal in sales %}
-          <tr>
-            <td>{{ sal.kode.upper() }} - {{ sal.nama }}</td>
-            <td align="center">
-              {% if sal.user %}
-                {{ sal.user.username }}
-              {% else %}
-                <a onclick="toggle_add_user({{ sal.id }})"><i class="fas fa-user-plus"></i></a>
-              {% endif %}
-            </td>
-            <td>{{ sal.telepon or "-" }}</td>
-            <td>
-              {% if sal.user %}
-                <small>
-                  <a href="#" onclick="toggle_password({{ sal.user.id }})">
-                    <span class="fa-passwd-reset fa-stack">
-                      <i class="fa fa-undo fa-stack-2x"></i>
-                      <i class="fa fa-lock fa-stack-1x"></i>
-                    </span>
-                  </a>
-                  <a href="#">
-                    <span class="fa-edit-sales fa-stack">
-                      <i class="fa fa-undo fa-stack-2x"></i>
-                      <i class="fa fa-user fa-stack-1x"></i>
-                    </span>
-                  </a>
-              </small>
-            {% else %}-{% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
 
-      <!-- Modal to add user on existing sales -->
-      <div class="modal" id="add-user">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <form id="add_user" action="/users" method="post">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Tambah User</p>
-              <button class="delete" type="button" aria-label="close" onclick="toggle_add_user(0)"></button>
-            </header>
-            <section class="modal-card-body">
-              <div class="pt-2 pb-2">
-                <label class="label" for="username">Username</label>
-                <input class="input is-link" type="text" name="username" value="">
-              </div>
-              <div class="pt-2 pb-2">
-                <label class="label" for="password">Password</label>
-                <input class="input is-link" type="password" name="password" value="">
-              </div>
-            </section>
-            <footer class="modal-card-foot">
-              <div class="pl-2 pr-2">
-                <input class="button is-link" type="submit" value="Tambah">
-                <!-- <button class="button is-link" type="button" onclick="add_user()">Tambah</button> -->
-              </div>
-              <button class="button" type="button" onclick="toggle_add_user(0)">Batal</button>
-            </footer>
-          </form>
-        </div>
-      </div>
+    <div id="sales">
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr class="text-center">
+                      <th>No</th>
+                      <th>Nama</th>
+                      <th>Kode</th>
+                      <th>Username</th>
+                      <th>Telepon</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                      <tr v-for="(s, i) in sales">
+                          <td>${ i+1 }</td>
+                          <td>${ s.nama }</td>
+                          <td>${ s.kode.toUpperCase() }</td>
+                          <td align="center">
+                              <span v-if="s.user">${ s.user.username }</span>
+                              <span v-else>
+                                  <button type="button"
+                                          class="btn btn-sm btn-primary"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#addUserSales"
+                                          v-on:click="updateSalesForm(s)">
+                                      <i class="fas fa-user-plus"></i>
+                                  </button>
+                              </span>
+                          </td>
+                          <td>${ s.telepon }</td>
+                          <td>
+                              <a href="#" data-bs-toggle="modal"
+                                      data-bs-target="#updateUserPassword"
+                                      v-on:click="updateSalesForm(s)">
+                                  <i class="fas fa-key"></i>
+                              </a>
+                          </td>
+                      </tr>
+                  </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
 
-      <!-- Modal to change user password -->
-      <div class="modal" id="change-password">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <form id="change_password" action="/users" method="post">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Tambah User</p>
-              <button class="delete" type="button" aria-label="close" onclick="toggle_password(0)"></button>
-            </header>
-            <section class="modal-card-body">
-              <div class="pt-2 pb-2">
-                <label class="label" for="password">Password Baru</label>
-                <input class="input is-link" type="password" name="password" value="">
-              </div>
-              <div class="pt-2 pb-2">
-                <label class="label" for="password">Ulang Password</label>
-                <input class="input is-link" type="password" name="password2" value="">
-              </div>
-            </section>
-            <footer class="modal-card-foot">
-              <div class="pl-2 pr-2">
-                <input class="button is-link" type="submit" value="Ubah">
-              </div>
-              <button class="button" type="button" onclick="toggle_password(0)">Batal</button>
-            </footer>
-          </form>
+            </div>
         </div>
-      </div>
+
+        <!-- Modal to add user on existing sales -->
+        <div class="modal fade"
+                id="addUserSales"
+                tabindex="-1"
+                aria-labelledby="addUserSalesLabel"
+                aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Tambah User untuk Sales
+                            <span>
+                                ${ sales_form.nama }
+                            </span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form pt-2 pb-2">
+                          <label class="form-label" for="username">Username</label>
+                          <input class="form-control" type="text" name="username" v-model="username">
+                        </div>
+                        <div class="form pt-2 pb-2">
+                          <label class="form-label" for="password">Password</label>
+                          <input class="form-control" type="password" name="password" v-model="password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary" v-on:click="addUser">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal to update User Password -->
+        <div class="modal fade"
+                id="updateUserPassword"
+                tabindex="-1"
+                aria-labelledby="updateUserPasswordLabel"
+                aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Ganti Password untuk user
+                            <span v-if="sales_form.user">
+                                ${ sales_form.user.username }
+                            </span>
+                            <span v-else>
+                                ???
+                            </span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form pt-2 pb-2">
+                          <label class="form-label" for="password">Password</label>
+                          <input class="form-control" type="password" name="password" v-model="password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary" v-on:click="updatePassword">Ganti</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
   </div>
 {% endblock %}
 
 {% block js %}
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 <script>
-  let add_user_id = 0;
+    var sales = new Vue({
+        el: '#sales',
+        delimiters: ['${', '}'],
+        data: {
+          sales: [],
+          sales_form: {},
+          username: "",
+          password: ""
+        },
+        created() {
+            // fetch penjualan
+            getJsonData("/api/sales")
+                .then(results => {
+                    if (!results.detail) {
+                        this.sales = results;
+                        this.sales_form = this.sales[0];
+                        this.username = this.sales_form.nama.toLowerCase();
+                        console.log(this.sales_form);
+                    } else {
+                        alert(results.detail);
+                    }
+                }).catch(err => {
+                    console.error('Error:', err);
+                });
+        },
+        methods: {
+            addUser: function (event) {
+                let new_user = {
+                    username: this.username,
+                    password: this.password,
+                    role: 2
+                }
+                // console.log(new_user);
 
-  function toggle_create_user() {
-    toggleModal("create-sales");
-  }
+                postJsonData(`/api/users`, new_user)
+                    .then(result => {
+                        console.log(result);
+                        let sales_data = {
+                            nama: this.sales_form.nama,
+                            kode: this.sales_form.kode,
+                            alamat: this.sales_form.alamat,
+                            kota: this.sales_form.kota,
+                            telepon: this.sales_form.telepon,
+                            keterangan: this.sales_form.keterangan,
+                            user_id: result.id
+                        }
 
-  function toggle_add_user(sales_id) {
-    toggleModal("add-user", function() {
-      document.getElementById('add_user').action = "/users/sales/" + sales_id;
-      console.log(formToJson(document.getElementById('add_user')));
-      add_user_id = sales_id;
-    });
-  }
+                        // update sales data
+                        postJsonData(`/api/sales/${this.sales_form.id}`, sales_data)
+                            .then(result => {
+                                // update this.sales
+                                this.sales.forEach(function(s, i, sales) {
+                                    if (s.id == result.id) {
+                                        sales[i] = result;
+                                    }
+                                });
 
-  // function add_user() {
-  //   let data = formToJson(document.getElementById('add_user'));
-  //   let res = sendPostRequest("/users/sales/" + add_user_id, data, function(res){
-  //     console.log(res.status);
-  //     showMessage(res.status);
-  //   });
-  // }
+                                alert("Sales User has been added!");
+                                closeModalEl("addUserSalesLabel");
+                                this.$forceUpdate();
+                            }).catch(err => {
+                                console.error('Error:', err);
+                            });
+                    }).catch(err => {
+                        console.error('Error:', err);
+                    });
+            },
+            updatePassword: function (user) {
+                let user_data = {
+                    username: this.sales_form.user.username,
+                    password: this.password,
+                    role: this.sales_form.user.role
+                }
 
-  function toggle_password(user_id) {
-    toggleModal("change-password", function() {
-      document.getElementById('change_password').action = "/users/" + user_id + "/password";
-    });
-  }
+                // update sales data
+                postJsonData(`/api/users/${this.sales_form.user.id}`, user_data)
+                    .then(result => {
+                        // update this.sales
+                        this.sales.forEach(function(s, i, sales) {
+                            if (s.user && s.user.id == result.id) {
+                                sales[i].user = result;
+                            }
+                        });
+
+                        alert("User Password has been changed!");
+                        closeModalEl('updateUserPassword');
+
+                        this.password = "";
+                        this.$forceUpdate();
+                    }).catch(err => {
+                        console.error('Error:', err);
+                    });
+            },
+            updateSalesForm: function (user) {
+                this.sales_form = user;
+                this.username = user.nama.toLowerCase();
+            }
+        },
+        filters: {
+
+        },
+    })
 </script>
 {% endblock %}

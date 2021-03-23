@@ -8,14 +8,18 @@ class BaseUser(BaseModel):
     username: str
     password: str
 
-    @classmethod
-    def as_form(cls, username: str = Form(...), password: str = Form(...)):
-        return cls(username=username, password=password)
+    class Config:
+        orm_mode = True
+
+
+class CreateUser(BaseUser):
+    role: int
 
 
 class UserInfo(BaseModel):
     id: int
     username: str
+    role: int
     role_tag: str
     last_login: Optional[datetime.datetime]
 
@@ -26,34 +30,25 @@ class UserInfo(BaseModel):
 class BaseSales(BaseModel):
     nama: str
     kode: str
-    alamat: str
-    kota: str
-    telepon: str
-    keterangan: str
+    alamat: Optional[str]
+    kota: Optional[str]
+    telepon: Optional[str]
+    keterangan: Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class SalesInfo(BaseSales):
+    id: int
+    user: Optional[UserInfo]
+
+    class Config:
+        orm_mode = True
 
 
 class CreateSales(BaseSales):
-    username: str
-    password: str
-
-    @classmethod
-    def as_form(cls,
-        nama: str = Form(...),
-        kode: str = Form(...),
-        username: str = Form(...),
-        password: str = Form(...),
-        alamat: Optional[str] = Form(""),
-        kota: Optional[str] = Form(""),
-        telepon: Optional[str] = Form(""),
-        keterangan: Optional[str] = Form("")):
-        return cls(nama=nama,
-            kode=kode,
-            username=username,
-            password=password,
-            alamat=alamat,
-            kota=kota,
-            telepon=telepon,
-            keterangan=keterangan)
+    user_id: int
 
 
 class CreateBarang(BaseModel):
