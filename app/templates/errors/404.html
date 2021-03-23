@@ -1,28 +1,21 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>404 Not Found</title>
-    <link rel="stylesheet" href="/static/css/bulma.min.css">
-  </head>
-  <body>
-  <section class="section">
-    <div class="columns">
-      <div class="column">
+{% extends 'main/base.html' %}
 
-      </div>
-      <div class="column">
-        <div class="container box">
-          <h1 class="title">
-            The Page You're looking for does not exists!
-          </h1>
-        </div>
-      </div>
-      <div class="column">
+{% set title = "Not Found" %}
 
-      </div>
+{% block css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="container text-center">
+        <h1>Page Not Found</h1>
     </div>
-  </section>
-  </body>
-</html>
+{% endblock %}
+
+{% block js %}
+<script>
+
+</script>
+{% endblock %}

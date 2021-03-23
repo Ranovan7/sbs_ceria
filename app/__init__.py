@@ -14,12 +14,13 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 origins = ["*"]
+templates = Jinja2Templates(directory="./app/templates")
 
 
 async def not_found(request, exc):
     if request.url.path.split("/")[1] == "api":
         return JSONResponse(content={'detail': "API not Found"})
-    return RedirectResponse(f"/#{request.url.path}")
+    return templates.TemplateResponse("errors/404.html", {"request": request, "nav_off": True})
 
 
 exception_handlers = {
@@ -33,9 +34,7 @@ app = FastAPI(
     description="api documentations",
     version="0.1.0",
     exception_handlers=exception_handlers)
-# app.mount("/static", StaticFiles(directory="app/static"), name="static")
-app.mount("/static", StaticFiles(directory="frontend/public/static"), name="static")
-app.mount("/build", StaticFiles(directory="frontend/public/build"), name="build")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -48,10 +47,6 @@ SQLALCHEMY_DATABASE_URL = os.environ["DATABASE_URL"]
 SECRET_KEY = os.environ["SECRET_KEY"]
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
-
-# templates = Jinja2Templates(directory="./app/templates")
-# templates = Jinja2Templates(directory="./spa/__sapper__/export")
-templates = Jinja2Templates(directory="./frontend/public")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -70,9 +65,9 @@ def db_session():
 
 
 # Routes
-from app.routes import main
+from app import routes
 from app import api
 
 
 app.include_router(api.router)
-app.include_router(main.router)
+app.include_router(routes.router)

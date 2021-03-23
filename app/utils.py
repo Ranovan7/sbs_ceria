@@ -114,12 +114,12 @@ async def get_message(message_text: str = Cookie(None), message_type: str = Cook
     }
 
 
-async def current_user(token: str = Cookie(None), db: Session = Depends(db_session)):
-    if not token:
+async def current_user(auth_token: str = Cookie(None), db: Session = Depends(db_session)):
+    if not auth_token:
         return None
     else:
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            payload = jwt.decode(auth_token, SECRET_KEY, algorithms=[ALGORITHM])
             username: str = payload.get("username")
             if username is None:
                 return None

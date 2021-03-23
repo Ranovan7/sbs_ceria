@@ -14,20 +14,10 @@
     </title>
 
     <!-- Custom styles for this template-->
-    <link rel="stylesheet" href="/static/css/bulma.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <style media="screen">
-      .collapse {
-        display: block;
-        max-height: 0px;
-        overflow: hidden;
-        transition: max-height .5s cubic-bezier(0, 1, 0, 1);;
 
-        &.show {
-          max-height: 99em;
-          transition: max-height .5s ease-in-out;
-        }
-      }
     </style>
 
     {% block css %}{% endblock %}
@@ -35,16 +25,19 @@
 
   <body id="page-top">
     <div id="wrapper">
-      {% include 'main/navbar.html' %}
+
+      {% if not nav_off %}
+        {% include 'main/navbar.html' %}
+      {% endif %}
 
       <div class="container" id="content-wrapper">
         <div class="">
 
-          <div id="notification" class="pb-2">
-            {% if message %}
-              <div class="notification is-{{ message.type }}" id="notif">
-                <button class="delete" onclick="closeNotification('notif')"></button>
-                {{ message.text }}
+          <div id="notification" class="pt-2">
+            {% if message_text %}
+              <div class="alert alert-{{ message_type }} alert-dismissible fade show" role="alert">
+                {{ message_text }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             {% endif %}
           </div>
@@ -53,17 +46,14 @@
         </div>
       </div>
     </div>
-    {% block js %}{% endblock %}
-  </body>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  <script src="/static/js/main.js"></script>
-  <script>
-    bulmaCalendar.attach('.date-picker', {
-      dateFormat: "YYYY-MM-DD",
-      type: 'date',
-      showClearButton: true
-    });
-    document.querySelector('.date-picker').bulmaCalendar.on('select', date => {console.log(date)});
-  </script>
+    {% block js %}{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+
+    </script>
+  </body>
 </html>

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app import templates, oauth2_scheme
 from app.models import User
 from app.utils import db_session, current_user, login_required, authenticate_user
-from app.utils import api_any_user, get_current_user
+from app.utils import api_any_user, get_current_user, login_required
 import datetime
 
 router = APIRouter(
@@ -18,39 +18,47 @@ router = APIRouter(
 )
 
 
-@router.get("/")
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@router.get("/", dependencies=[Depends(login_required)])
+async def index(request: Request, user=Depends(current_user)):
+    if user.role_tag == "sales":
+        return RedirectResponse("/penjualan")
+    elif user.role_tag == "admin":
+        return RedirectResponse("/sdm")
+    else:
+        return templates.TemplateResponse("main/index.html",
+            {
+                "request": request,
+                "user": user
+            })
 
 
-# @router.get("/login")
-# async def login_get(request: Request, message_text: str = None, message_type: str = None):
-#     return templates.TemplateResponse("login/index.html", {
-#         "request": request,
-#         "message_text": message_text,
-#         "message_type": message_type})
+
+@router.get("/login")
+async def login_get(request: Request, message_text: str = None, message_type: str = None):
+    return templates.TemplateResponse("main/login.html", {
+        "request": request,
+        "nav_off": True,
+        "message_text": message_text,
+        "message_type": message_type})
 
 
-# @router.post("/login")
-# async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db_session)):
-#     user = db.query(User).filter(User.username == form_data.username).first()
-#
-#     if not user:
-#         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
-#
-#     if user.verify_password(form_data.password):
-#         # update user last_login
-#         user.last_login = datetime.datetime.now()
-#         db.commit()
-#
-#         response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
-#         response.set_cookie(key="token", value=user.create_access_token())
-#         response.set_cookie(
-#             key="Authorization",
-#             value=f"Bearer {user.create_access_token()}")
-#         return response
-#     else:
-#         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+@router.post("/login")
+async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db_session)):
+    user = db.query(User).filter(User.username == form_data.username).first()
+
+    if not user:
+        return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+
+    if user.verify_password(form_data.password):
+        # update user last_login
+        user.last_login = datetime.datetime.now()
+        db.commit()
+
+        response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
+        response.set_cookie(key="auth_token", value=user.create_access_token())
+        return response
+    else:
+        return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
 
 
 @router.post("/token")
@@ -91,4 +99,4 @@ async def logout(response: Response):
 
 @router.get("/forbidden")
 async def forbidden(request: Request):
-    return templates.TemplateResponse("errors/403.html", {"request": request})
+    return templates.TemplateResponse("errors/403.html", {"request": request, "nav_off": True})
