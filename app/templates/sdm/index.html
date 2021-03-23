@@ -201,10 +201,10 @@
                                         sales[i] = result;
                                     }
                                 });
+                                this.$forceUpdate();
 
                                 alert("Sales User has been added!");
-                                closeModalEl("addUserSalesLabel");
-                                this.$forceUpdate();
+                                closeModalEl("addUserSales");
                             }).catch(err => {
                                 console.error('Error:', err);
                             });
@@ -228,12 +228,11 @@
                                 sales[i].user = result;
                             }
                         });
+                        this.password = "";
+                        this.$forceUpdate();
 
                         alert("User Password has been changed!");
                         closeModalEl('updateUserPassword');
-
-                        this.password = "";
-                        this.$forceUpdate();
                     }).catch(err => {
                         console.error('Error:', err);
                     });
