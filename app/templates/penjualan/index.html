@@ -182,7 +182,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-success" v-if="!penjualan[p_idx].accepted" v-on:click="terimaPenjualan(penjualan[p_idx])">Terima</button>
+                    <button type="button" class="btn btn-success" v-if="user.role == 'admin' && !penjualan[p_idx].accepted" v-on:click="terimaPenjualan(penjualan[p_idx])">Terima</button>
                 </div>
             </div>
         </div>
