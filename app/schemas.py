@@ -78,6 +78,13 @@ class BasePelangganSupplier(BaseModel):
     keterangan: str
 
 
+class PelangganInfo(BasePelangganSupplier):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class MasterSupplier(BasePelangganSupplier):
     npwp: str
 
@@ -144,7 +151,7 @@ class ItemPenjualanInfo(BaseItemPenjualan):
 
 
 class BasePenjualan(BaseModel):
-    tgl: datetime.datetime
+    tgl: Optional[datetime.datetime] = datetime.datetime.now()
     sales_id: int
     pelanggan_id: int
 
@@ -152,6 +159,8 @@ class BasePenjualan(BaseModel):
 class PenjualanInfo(BasePenjualan):
     id: int
     accepted: bool
+    sales: SalesInfo
+    pelanggan: PelangganInfo
     item_penjualan: List[ItemPenjualanInfo] = []
 
     class Config:

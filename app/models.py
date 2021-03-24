@@ -183,7 +183,9 @@ class Penjualan(Base):
     accepted = Column(Boolean, nullable=False, default=False)
 
     sales_id = Column(Integer, ForeignKey('sales.id'), nullable=True)
+    sales = relationship("Sales", lazy='joined')
     pelanggan_id = Column(Integer, ForeignKey('pelanggan.id'), nullable=True)
+    pelanggan = relationship("Pelanggan", lazy='joined')
 
     item_penjualan = relationship("ItemPenjualan", back_populates="penjualan", lazy='joined')
 

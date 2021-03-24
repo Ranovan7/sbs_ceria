@@ -41,7 +41,7 @@ async def index(
             )
 
     # query = query.offset(skip).limit(limit)
-    return query.all()
+    return query.order_by(Penjualan.tgl.desc()).all()
 
 
 @router.get("/{penjualan_id}",
@@ -86,7 +86,8 @@ async def add_penjualan(
 
 
 @router.post("/{penjualan_id}/accept",
-    dependencies=[Depends(api_admin_only)])
+    dependencies=[Depends(api_admin_only)],
+    response_model=PenjualanInfo)
 async def accept_penjualan(
     penjualan_id: int,
     db: Session = Depends(db_session)
@@ -94,6 +95,7 @@ async def accept_penjualan(
     penjualan = db.query(Penjualan).get(penjualan_id)
     penjualan.accepted = True
     db.commit()
+    db.refresh(penjualan)
     return penjualan
 
 

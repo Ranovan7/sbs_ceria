@@ -148,6 +148,7 @@ class RoleChecker:
 login_required = RoleChecker()
 admin_only = RoleChecker(['admin'])
 sales_only = RoleChecker(['sales'])
+admin_or_sales = RoleChecker(['admin', 'sales'])
 
 
 class APIRoleChecker:

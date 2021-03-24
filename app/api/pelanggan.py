@@ -30,7 +30,7 @@ async def index(
         query = db.query(Pelanggan)
 
     # query = query.offset(skip).limit(limit)
-    return query.all()
+    return query.order_by(Pelanggan.id).all()
 
 
 @router.get("/{pelanggan_id}", dependencies=[Depends(api_any_user)])
