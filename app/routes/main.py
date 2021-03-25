@@ -93,7 +93,7 @@ async def logout(response: Response):
     response = RedirectResponse(f"/login?{params}")
 
     token = "not-logged-in"
-    response.set_cookie(key="token", value=token)
+    response.set_cookie(key="auth_token", value=token)
     return response
 
 
