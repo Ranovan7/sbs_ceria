@@ -15,72 +15,7 @@
 
         <!-- ORDER FORMS -->
         {% if user.role_tag == 'sales' %}
-            <button class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#orderPenjualan">Order</button>
-            <div class="modal fade"
-                    id="orderPenjualan"
-                    tabindex="-1"
-                    aria-labelledby="orderPenjualanLabel"
-                    aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">
-                                Order Barang
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form pt-2 pb-2">
-                                <label class="form-label" for="pelanggan">Pelanggan</label>
-                                <select class="form-select" aria-label="Pelanggan" v-model="pelanggan_id">
-                                    <option v-for="p in pelanggan" v-bind:value="p.id">${ p.nama }</option>
-                                </select>
-                            </div>
-
-                            <div class="card">
-                              <div class="card-body">
-                                <h5 class="card-title">Daftar Barang</h5>
-                                <div class="row" v-for="(bl, i) in barang_list">
-                                    <div class="col-md-9">
-                                        <div class="form pt-2 pb-2">
-                                          <label class="form-label" for="barang">Barang</label>
-                                          <select class="form-select" aria-label="barang" v-model="bl.barang_id">
-                                              <option v-for="b in barang" v-bind:value="b.id">${ b.obat.nama } - ${ b.batch }</option>
-                                          </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form pt-2 pb-2">
-                                          <label class="form-label" for="qty">Qty</label>
-                                          <input class="form-control" type="number" name="qty" step="1" v-model="bl.qty">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="form pt-2 pb-2">
-                                          <label class="form-label" for="hapus"></label>
-                                          <button class="btn btn-sm btn-danger" valign="bottom" v-on:click="removeBarangList(i)">X</button>
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
-
-                              <div class="text-center pb-2">
-                                  <button class="btn btn-sm btn-primary" v-on:click="addBarangList">
-                                      <i class="fas fa-plus"></i>
-                                  </button>
-                              </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="button" class="btn btn-primary" v-on:click="orderPenjualan">Order</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a href="/penjualan/order" class="btn btn-primary">Order</a>
         {% endif %}
 
     </div>
@@ -210,12 +145,6 @@
             pelanggan: [],
             pelanggan_id: 0,
             barang: [],
-            barang_list: [
-                {
-                    barang_id: 0,
-                    qty: 0
-                }
-            ],
         },
         created() {
             // fetch penjualan
@@ -274,36 +203,6 @@
             get_date: function (date_str) {
                 return moment(date_str, "YYYY-MM-DDTHH:mm:ss").format('DD MMMM YYYY');
             },
-            orderPenjualan: function (event) {
-                this.barang_list.forEach(function(value, i, arr){
-                    arr[i].qty = parseInt(value.qty);
-                });
-                let order = {
-                    sales_id: this.sales.id,
-                    pelanggan_id: this.pelanggan_id,
-                    item_penjualan: this.barang_list
-                };
-                console.log(order);
-
-                // update sales data
-                postJsonData(`/api/penjualan`, order)
-                    .then(result => {
-                        // update this.penjualan
-                        this.penjualan.push(result);
-                        this.barang_list = [
-                            {
-                                barang_id: 0,
-                                qty: 0
-                            }
-                        ];
-                        this.$forceUpdate();
-
-                        alert("Order berhasil dikirim!");
-                        closeModalEl('orderPenjualan');
-                    }).catch(err => {
-                        console.error('Error:', err);
-                    });
-            },
             terimaPenjualan: function (penjualan) {
                 // update sales data
                 let accept = confirm(`Terima Order dari ${penjualan.sales.nama} untuk pelanggan ${penjualan.pelanggan.nama}?`);
@@ -324,18 +223,6 @@
                             console.error('Error:', err);
                         });
                 }
-            },
-            addBarangList: function () {
-                this.barang_list.push({
-                    barang_id: 0,
-                    qty: 0
-                });
-            },
-            removeBarangList: function (idx) {
-                this.barang_list = this.barang_list.filter(function(value, i, arr){
-                    return !(idx == i);
-                });
-                console.log(this.barang_list);
             },
             getBarangName: function (b_id) {
                 let brname = "";

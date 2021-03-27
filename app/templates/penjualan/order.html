@@ -1,0 +1,199 @@
+{% extends 'main/base.html' %}
+
+{% set title = "Penjualan" %}
+
+{% block css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="order">
+    <div class="pb-3">
+        <h1>Order Penjualan</h1>
+
+        <!-- ORDER FORMS -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form pt-2 pb-2">
+                    <label class="form-label" for="pelanggan">Pelanggan</label>
+                    <select class="form-select" aria-label="Pelanggan" v-model="pelanggan_id">
+                        <option v-for="p in pelanggan" v-bind:value="p.id">${ p.nama }</option>
+                    </select>
+                </div>
+
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Daftar Barang</h5>
+                    <div class="row" v-for="(bl, i) in barang_list">
+                        <div class="col-md-9">
+                            <div class="form pt-2 pb-2">
+                              <label class="form-label" for="barang">Barang</label>
+                              <select class="form-select" aria-label="barang" v-model="bl.barang_id">
+                                  <option v-for="b in barang" v-bind:value="b.id">${ b.obat.nama } - ${ b.batch }</option>
+                              </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form pt-2 pb-2">
+                              <label class="form-label" for="qty">Qty</label>
+                              <input class="form-control" type="number" name="qty" step="1" v-model="bl.qty">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form pt-2 pb-2">
+                              <label class="form-label" for="hapus"></label>
+                              <button class="btn btn-sm btn-danger" valign="bottom" v-on:click="removeBarangList(i)">X</button>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="text-center pb-2">
+                      <button class="btn btn-sm btn-primary" v-on:click="addBarangList">
+                          <i class="fas fa-plus"></i>
+                      </button>
+                  </div>
+                </div>
+                <hr>
+                <div class="">
+                    <a href="/penjualan" class="btn btn-secondary">Batal</a>
+                    <button type="button" class="btn btn-primary" v-on:click="orderPenjualan">Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.min.js"></script>
+<script>
+    var order = new Vue({
+        el: '#order',
+        delimiters: ['${', '}'],
+        data: {
+            user: {
+                username: "{{ user.username }}",
+                role: "{{ user.role_tag }}"
+            },
+            sales: {},
+            p_idx: 0,
+            pelanggan: [],
+            pelanggan_id: 0,
+            barang: [],
+            barang_list: [
+                {
+                    barang_id: 0,
+                    qty: 0
+                }
+            ],
+        },
+        created() {
+            // fetch pelanggan
+            getJsonData("/api/pelanggan")
+                .then(results => {
+                    if (!results.detail) {
+                        this.pelanggan = results;
+                        // console.log(results);
+                    } else {
+                        alert(results.detail);
+                    }
+                }).catch(err => {
+                    console.error('Error:', err);
+                });
+
+            // fetch pelanggan
+            getJsonData("/api/barang")
+                .then(results => {
+                    if (!results.detail) {
+                        this.barang = results;
+                        // console.log(results);
+                    } else {
+                        alert(results.detail);
+                    }
+                }).catch(err => {
+                    console.error('Error:', err);
+                });
+
+            // fetch pelanggan
+            getJsonData("/api/sales")
+                .then(results => {
+                    if (!results.detail) {
+                        this.sales = results[0];
+                        // console.log(results);
+                    } else {
+                        alert(results.detail);
+                    }
+                }).catch(err => {
+                    console.error('Error:', err);
+                });
+        },
+        methods: {
+            get_date: function (date_str) {
+                return moment(date_str, "YYYY-MM-DDTHH:mm:ss").format('DD MMMM YYYY');
+            },
+            orderPenjualan: function (event) {
+                this.barang_list.forEach(function(value, i, arr){
+                    arr[i].qty = parseInt(value.qty);
+                });
+                let order = {
+                    sales_id: this.sales.id,
+                    pelanggan_id: this.pelanggan_id,
+                    item_penjualan: this.barang_list
+                };
+                console.log(order);
+
+                // update sales data
+                postJsonData(`/api/penjualan`, order)
+                    .then(result => {
+
+                        if (result.detail) {
+                            alert(result.detail);
+                            return null;
+                        }
+
+                        // update this.penjualan
+                        this.barang_list = [
+                            {
+                                barang_id: 0,
+                                qty: 0
+                            }
+                        ];
+                        this.$forceUpdate();
+
+                        let response = confirm("Order berhasil dikirim!");
+                        if (response == true) {
+                            window.open("/penjualan", "_self");
+                        } else {
+                            alert("Anda memilih menambah Order.");
+                        }
+                    }).catch(err => {
+                        console.error('Error:', err);
+                    });
+            },
+            addBarangList: function () {
+                this.barang_list.push({
+                    barang_id: 0,
+                    qty: 0
+                });
+            },
+            removeBarangList: function (idx) {
+                this.barang_list = this.barang_list.filter(function(value, i, arr){
+                    return !(idx == i);
+                });
+                console.log(this.barang_list);
+            },
+        },
+        computed: {
+
+        },
+        filters: {
+
+        },
+    })
+</script>
+{% endblock %}
