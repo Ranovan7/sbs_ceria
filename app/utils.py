@@ -42,6 +42,7 @@ async def not_logged_in_exception_handler(request: Request, exc: NotLoggedInExce
                     "type": "Not Authorized",
                     "message": "Please Log In to access endpoint"
                 },
+                "detail": "Please Log In to access endpoint"
             },
         )
     else:
@@ -58,6 +59,7 @@ async def not_allowed_exception_handler(request: Request, exc: NotAllowedExcepti
                     "type": "Not Authorized",
                     "message": "Please Log In as user with appropriate role"
                 },
+                "detail": "Please Log In as user with appropriate role"
             },
         )
     else:
@@ -181,18 +183,9 @@ templates = Jinja2Templates(directory="./app/templates")
 
 
 def RedirectWithMessage(url: str, message: str, type: str):
+    url += f"?message_text={message}"
+    url += f"&message_type={type}"
     response = RedirectResponse(url, status_code=status.HTTP_303_SEE_OTHER)
-    response.set_cookie(key="message_text", value=message)
-    response.set_cookie(key="message_type", value=type)
-    response.set_cookie(key="message", value="true")
-    return response
-
-
-def CustomTemplateResponse(filepath:str, data: Dict):
-    response = templates.TemplateResponse(filepath, data)
-    response.set_cookie(key="message_text", value=None)
-    response.set_cookie(key="message_type", value=None)
-    response.set_cookie(key="message", value="false")
     return response
 
 

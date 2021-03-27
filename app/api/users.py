@@ -31,13 +31,18 @@ async def add_users(
     user_data: CreateUser,
     db: Session = Depends(db_session)
 ):
-    new_user = User(username=user_data.username, role=user_data.role)
-    new_user.set_password(user_data.password)
+    try:
+        new_user = User(username=user_data.username, role=user_data.role)
+        new_user.set_password(user_data.password)
 
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+    except IntegrityError:
+        raise HTTPException(status_code=422, detail="Terjadi Kesalahan dalam Data")
+    except Exception as e:
+        raise HTTPException(status_code=422, detail="Terjadi Error saat melakukan penambahan User")
 
 
 @router.get("/{user_id}",

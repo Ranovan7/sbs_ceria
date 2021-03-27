@@ -8,6 +8,7 @@ from app import templates, oauth2_scheme
 from app.models import User
 from app.utils import db_session, current_user, login_required, authenticate_user
 from app.utils import api_any_user, get_current_user, login_required
+from app.utils import RedirectWithMessage
 import datetime
 
 router = APIRouter(
@@ -48,6 +49,10 @@ async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = 
 
     if not user:
         return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+        return RedirectWithMessage(
+            "/login",
+            "Username atau Password Salah!",
+            "danger")
 
     if user.verify_password(form_data.password):
         # update user last_login
@@ -58,7 +63,11 @@ async def login_post(response: Response, form_data: OAuth2PasswordRequestForm = 
         response.set_cookie(key="auth_token", value=user.create_access_token())
         return response
     else:
-        return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+        # return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+        return RedirectWithMessage(
+            "/login",
+            "Username atau Password Salah!",
+            "danger")
 
 
 @router.post("/token")

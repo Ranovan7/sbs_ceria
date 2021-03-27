@@ -209,6 +209,11 @@
                 if (accept) {
                     postJsonData(`/api/penjualan/${penjualan.id}/accept`, {})
                         .then(result => {
+                            if (result.detail) {
+                                alert(result.detail);
+                                return null;
+                            }
+
                             // update this.penjualan
                             console.log(result);
                             this.penjualan.forEach((item, i) => {

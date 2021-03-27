@@ -150,7 +150,6 @@
                 // update sales data
                 postJsonData(`/api/penjualan`, order)
                     .then(result => {
-
                         if (result.detail) {
                             alert(result.detail);
                             return null;
@@ -169,7 +168,7 @@
                         if (response == true) {
                             window.open("/penjualan", "_self");
                         } else {
-                            alert("Anda memilih menambah Order.");
+                            alert("Anda memilih lanjut menambah Order.");
                         }
                     }).catch(err => {
                         console.error('Error:', err);

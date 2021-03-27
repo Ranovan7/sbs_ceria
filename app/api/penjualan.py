@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from typing import List
 from app import db_session
 from app.utils import oauth2_scheme, api_any_user, api_admin_only, get_current_user
@@ -61,28 +62,31 @@ async def add_penjualan(
     penjualan: CreatePenjualan,
     db: Session = Depends(db_session)
 ) -> Penjualan:
-    new_penjualan = Penjualan(
-        tgl=penjualan.tgl,
-        sales_id=penjualan.sales_id,
-        pelanggan_id=penjualan.pelanggan_id
-    )
-    db.add(new_penjualan)
-    db.commit()
-    db.refresh(new_penjualan)
-    print("penjualan added")
-
-    for item in penjualan.item_penjualan:
-        new_item = ItemPenjualan(
-            qty=item.qty,
-            barang_id=item.barang_id,
-            penjualan_id=new_penjualan.id
+    try:
+        new_penjualan = Penjualan(
+            tgl=penjualan.tgl,
+            sales_id=penjualan.sales_id,
+            pelanggan_id=penjualan.pelanggan_id
         )
-        db.add(new_item)
+        db.add(new_penjualan)
         db.commit()
+        db.refresh(new_penjualan)
+        print("penjualan added")
 
-    print("returning penjualan")
+        for item in penjualan.item_penjualan:
+            new_item = ItemPenjualan(
+                qty=item.qty,
+                barang_id=item.barang_id,
+                penjualan_id=new_penjualan.id
+            )
+            db.add(new_item)
+            db.commit()
 
-    return new_penjualan
+        return new_penjualan
+    except IntegrityError:
+        raise HTTPException(status_code=422, detail="Terjadi Kesalahan dalam Data")
+    except Exception as e:
+        raise HTTPException(status_code=422, detail="Terjadi Error saat melakukan penambahan Order")
 
 
 @router.post("/{penjualan_id}/accept",
