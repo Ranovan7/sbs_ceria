@@ -135,37 +135,37 @@ class BarangInfo(BaseModel):
         orm_mode = True
 
 
-class BaseItemPenjualan(BaseModel):
+class BaseItemPesanan(BaseModel):
     qty: int
     barang_id: int
 
 
-class ItemPenjualanInfo(BaseItemPenjualan):
+class ItemPesananInfo(BaseItemPesanan):
     id: int
     satuan: Optional[str] = None
     diskon: Optional[int] = None
-    penjualan_id: int
+    pesanan_id: int
 
     class Config:
         orm_mode = True
 
 
-class BasePenjualan(BaseModel):
+class BasePesanan(BaseModel):
     tgl: Optional[datetime.datetime] = datetime.datetime.now()
     sales_id: int
     pelanggan_id: int
 
 
-class PenjualanInfo(BasePenjualan):
+class PesananInfo(BasePesanan):
     id: int
     accepted: bool
     sales: SalesInfo
     pelanggan: PelangganInfo
-    item_penjualan: List[ItemPenjualanInfo] = []
+    item_pesanan: List[ItemPesananInfo] = []
 
     class Config:
         orm_mode = True
 
 
-class CreatePenjualan(BasePenjualan):
-    item_penjualan: List[BaseItemPenjualan]
+class CreatePesanan(BasePesanan):
+    item_pesanan: List[BaseItemPesanan]

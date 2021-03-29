@@ -3,3 +3,4 @@ Pipfile.lock
 .venv
 __pycache__
 */__pycache__
+update_db.txt

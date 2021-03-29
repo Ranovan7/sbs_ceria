@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 
-{% set title = "Penjualan" %}
+{% set title = "Pesanan" %}
 
 {% block css %}
 <style>
@@ -11,7 +11,7 @@
 {% block content %}
 <div id="order">
     <div class="pb-3">
-        <h1>Order Penjualan</h1>
+        <h1>Order Pesanan</h1>
 
         <!-- ORDER FORMS -->
         <div class="row">
@@ -58,8 +58,8 @@
                 </div>
                 <hr>
                 <div class="">
-                    <a href="/penjualan" class="btn btn-secondary">Batal</a>
-                    <button type="button" class="btn btn-primary" v-on:click="orderPenjualan">Order</button>
+                    <a href="/pesanan" class="btn btn-secondary">Batal</a>
+                    <button type="button" class="btn btn-primary" v-on:click="orderPesanan">Order</button>
                 </div>
             </div>
         </div>
@@ -136,26 +136,26 @@
             get_date: function (date_str) {
                 return moment(date_str, "YYYY-MM-DDTHH:mm:ss").format('DD MMMM YYYY');
             },
-            orderPenjualan: function (event) {
+            orderPesanan: function (event) {
                 this.barang_list.forEach(function(value, i, arr){
                     arr[i].qty = parseInt(value.qty);
                 });
                 let order = {
                     sales_id: this.sales.id,
                     pelanggan_id: this.pelanggan_id,
-                    item_penjualan: this.barang_list
+                    item_pesanan: this.barang_list
                 };
                 console.log(order);
 
                 // update sales data
-                postJsonData(`/api/penjualan`, order)
+                postJsonData(`/api/pesanan`, order)
                     .then(result => {
                         if (result.detail) {
                             alert(result.detail);
                             return null;
                         }
 
-                        // update this.penjualan
+                        // update this.pesanan
                         this.barang_list = [
                             {
                                 barang_id: 0,
@@ -166,7 +166,7 @@
 
                         let response = confirm("Order berhasil dikirim!");
                         if (response == true) {
-                            window.open("/penjualan", "_self");
+                            window.open("/pesanan", "_self");
                         } else {
                             alert("Anda memilih lanjut menambah Order.");
                         }

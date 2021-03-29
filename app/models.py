@@ -175,8 +175,8 @@ class Barang(Base):
                                           name='barang_batch_date_obat'),)
 
 
-class Penjualan(Base):
-    __tablename__ = "penjualan"
+class PesananIn(Base):
+    __tablename__ = "pesanan_in"
 
     id = Column(Integer, primary_key=True, index=True)
     tgl = Column(DateTime, nullable=False, default=datetime.now())
@@ -187,18 +187,47 @@ class Penjualan(Base):
     pelanggan_id = Column(Integer, ForeignKey('pelanggan.id'), nullable=True)
     pelanggan = relationship("Pelanggan", lazy='joined')
 
-    item_penjualan = relationship("ItemPenjualan", back_populates="penjualan", lazy='joined')
+    item_pesanan = relationship("ItemPesananIn", back_populates="pesanan", lazy='joined')
 
 
-class ItemPenjualan(Base):
-    __tablename__ = "item_penjualan"
+class ItemPesananIn(Base):
+    __tablename__ = "item_pesanan_in"
 
     id = Column(Integer, primary_key=True, index=True)
     qty = Column(Integer)
     satuan = Column(String(10))
     diskon = Column(Float)
 
-    penjualan_id = Column(Integer, ForeignKey('penjualan.id'), nullable=True)
+    pesanan_id = Column(Integer, ForeignKey('pesanan_in.id'), nullable=True)
     barang_id = Column(Integer, ForeignKey('barang.id'), nullable=True)
 
-    penjualan = relationship("Penjualan", back_populates="item_penjualan")
+    pesanan = relationship("PesananIn", back_populates="item_pesanan")
+
+
+class PesananOut(Base):
+    __tablename__ = "pesanan_out"
+
+    id = Column(Integer, primary_key=True, index=True)
+    tgl = Column(DateTime, nullable=False, default=datetime.now())
+    accepted = Column(Boolean, nullable=False, default=False)
+
+    sales_id = Column(Integer, ForeignKey('sales.id'), nullable=True)
+    sales = relationship("Sales", lazy='joined')
+    pelanggan_id = Column(Integer, ForeignKey('pelanggan.id'), nullable=True)
+    pelanggan = relationship("Pelanggan", lazy='joined')
+
+    item_pesanan = relationship("ItemPesananOut", back_populates="pesanan", lazy='joined')
+
+
+class ItemPesananOut(Base):
+    __tablename__ = "item_pesanan_out"
+
+    id = Column(Integer, primary_key=True, index=True)
+    qty = Column(Integer)
+    satuan = Column(String(10))
+    diskon = Column(Float)
+
+    pesanan_id = Column(Integer, ForeignKey('pesanan_out.id'), nullable=True)
+    barang_id = Column(Integer, ForeignKey('barang.id'), nullable=True)
+
+    pesanan = relationship("PesananOut", back_populates="item_pesanan")

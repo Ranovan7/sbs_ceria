@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 
-{% set title = "Penjualan" %}
+{% set title = "Pesanan" %}
 
 {% block css %}
 <style>
@@ -9,13 +9,13 @@
 {% endblock %}
 
 {% block content %}
-<div id="penjualan">
+<div id="pesanan">
     <div class="pb-3">
-        <h1>Penjualan</h1>
+        <h1>Pesanan</h1>
 
         <!-- ORDER FORMS -->
         {% if user.role_tag == 'sales' %}
-            <a href="/penjualan/order" class="btn btn-primary">Order</a>
+            <a href="/pesanan/order" class="btn btn-primary">Order</a>
         {% endif %}
 
     </div>
@@ -29,8 +29,8 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody v-if="penjualan.length > 0">
-            <tr v-for="(p, i) in penjualan">
+        <tbody v-if="pesanan.length > 0">
+            <tr v-for="(p, i) in pesanan">
                 <td>${ get_date(p.tgl) }</td>
                 <td>${ p.sales.nama }</td>
                 <td>${ p.pelanggan.nama }</td>
@@ -41,11 +41,11 @@
                 <td align="center">
                     <button class="btn btn-sm btn-info"
                         data-bs-toggle="modal"
-                        data-bs-target="#detailPenjualan"
+                        data-bs-target="#detailPesanan"
                         v-on:click="p_idx = i">
                         <i class="fas fa-clipboard"></i>
                     </button>
-                    <button class="btn btn-sm btn-success" v-if="user.role == 'admin' && !p.accepted" v-on:click="terimaPenjualan(p)">
+                    <button class="btn btn-sm btn-success" v-if="user.role == 'admin' && !p.accepted" v-on:click="terimaPesanan(p)">
                         <i class="fas fa-check"></i>
                     </button>
                 </td>
@@ -58,13 +58,13 @@
         </tbody>
     </table>
 
-    <!-- MODAL DETAIL PENJUALAN -->
+    <!-- MODAL DETAIL Pesanan -->
     <div class="modal fade"
-            id="detailPenjualan"
+            id="detailPesanan"
             tabindex="-1"
-            aria-labelledby="detailPenjualanLabel"
+            aria-labelledby="detailPesananLabel"
             aria-hidden="true"
-            v-if="penjualan.length > 0">
+            v-if="pesanan.length > 0">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -79,25 +79,25 @@
                             <div class="col-md-6">
                                 <div class="form pt-2 pb-2">
                                     <label class="form-label" for="pelanggan">Tanggal</label>
-                                    <input type="text" class="form-control" v-bind:value="get_date(penjualan[p_idx].tgl)">
+                                    <input type="text" class="form-control" v-bind:value="get_date(pesanan[p_idx].tgl)">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form pt-2 pb-2">
                                     <label class="form-label" for="pelanggan">Sales</label>
-                                    <input type="text" class="form-control" v-bind:value="penjualan[p_idx].sales.nama">
+                                    <input type="text" class="form-control" v-bind:value="pesanan[p_idx].sales.nama">
                                 </div>
                             </div>
                         </div>
                         <div class="form pt-2 pb-2">
                             <label class="form-label" for="pelanggan">Pelanggan</label>
-                            <input type="text" class="form-control" v-bind:value="penjualan[p_idx].pelanggan.nama">
+                            <input type="text" class="form-control" v-bind:value="pesanan[p_idx].pelanggan.nama">
                         </div>
 
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">Daftar Barang</h5>
-                            <div class="row" v-for="(ip, i) in penjualan[p_idx].item_penjualan">
+                            <div class="row" v-for="(ip, i) in pesanan[p_idx].item_pesanan">
                                 <div class="col-md-10">
                                     <div class="form pt-2 pb-2">
                                       <label class="form-label" for="barang">Barang</label>
@@ -117,7 +117,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-success" v-if="user.role == 'admin' && !penjualan[p_idx].accepted" v-on:click="terimaPenjualan(penjualan[p_idx])">Terima</button>
+                    <button type="button" class="btn btn-success" v-if="user.role == 'admin' && !pesanan[p_idx].accepted" v-on:click="terimaPesanan(pesanan[p_idx])">Terima</button>
                 </div>
             </div>
         </div>
@@ -131,8 +131,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.min.js"></script>
 <script>
-    var penjualan = new Vue({
-        el: '#penjualan',
+    var pesanan = new Vue({
+        el: '#pesanan',
         delimiters: ['${', '}'],
         data: {
             user: {
@@ -140,18 +140,18 @@
                 role: "{{ user.role_tag }}"
             },
             sales: {},
-            penjualan: [],
+            pesanan: [],
             p_idx: 0,
             pelanggan: [],
             pelanggan_id: 0,
             barang: [],
         },
         created() {
-            // fetch penjualan
-            getJsonData("/api/penjualan")
+            // fetch pesanan
+            getJsonData("/api/pesanan")
                 .then(results => {
                     if (!results.detail) {
-                        this.penjualan = results;
+                        this.pesanan = results;
                         console.log(results);
                     } else {
                         alert(results.detail);
@@ -203,22 +203,22 @@
             get_date: function (date_str) {
                 return moment(date_str, "YYYY-MM-DDTHH:mm:ss").format('DD MMMM YYYY');
             },
-            terimaPenjualan: function (penjualan) {
+            terimaPesanan: function (pesanan) {
                 // update sales data
-                let accept = confirm(`Terima Order dari ${penjualan.sales.nama} untuk pelanggan ${penjualan.pelanggan.nama}?`);
+                let accept = confirm(`Terima Order dari ${pesanan.sales.nama} untuk pelanggan ${pesanan.pelanggan.nama}?`);
                 if (accept) {
-                    postJsonData(`/api/penjualan/${penjualan.id}/accept`, {})
+                    postJsonData(`/api/pesanan/${pesanan.id}/accept`, {})
                         .then(result => {
                             if (result.detail) {
                                 alert(result.detail);
                                 return null;
                             }
 
-                            // update this.penjualan
+                            // update this.pesanan
                             console.log(result);
-                            this.penjualan.forEach((item, i) => {
+                            this.pesanan.forEach((item, i) => {
                                 if (item.id == result.id) {
-                                    this.penjualan[i] = result;
+                                    this.pesanan[i] = result;
                                 }
                             });
                             this.$forceUpdate();

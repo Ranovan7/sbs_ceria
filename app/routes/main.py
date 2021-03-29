@@ -22,7 +22,7 @@ router = APIRouter(
 @router.get("/", dependencies=[Depends(login_required)])
 async def index(request: Request, user=Depends(current_user)):
     if user.role_tag == "sales":
-        return RedirectResponse("/penjualan")
+        return RedirectResponse("/pesanan")
     elif user.role_tag == "admin":
         return RedirectResponse("/sdm")
     else:

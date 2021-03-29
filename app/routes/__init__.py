@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.routes import main, penjualan, sdm
+from app.routes import main, pesanan, sdm
 
 router = APIRouter(
     prefix="",
@@ -8,5 +8,5 @@ router = APIRouter(
 )
 
 router.include_router(main.router)
-router.include_router(penjualan.router)
+router.include_router(pesanan.router)
 router.include_router(sdm.router)

@@ -16,6 +16,7 @@ python-multipart = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
 typer = "*"
 gunicorn = "*"
+alembic = "*"
 
 [dev-packages]
 
