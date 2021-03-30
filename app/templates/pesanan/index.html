@@ -19,44 +19,98 @@
         {% endif %}
 
     </div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Tanggal</th>
-                <th>Sales</th>
-                <th>Pelanggan</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody v-if="pesanan.length > 0">
-            <tr v-for="(p, i) in pesanan">
-                <td>${ get_date(p.tgl) }</td>
-                <td>${ p.sales.nama }</td>
-                <td>${ p.pelanggan.nama }</td>
-                <td align="center">
-                    <span class="badge bg-success" v-if="p.accepted">Diterima</span>
-                    <span class="badge bg-secondary" v-else>Pending</span>
-                </td>
-                <td align="center">
-                    <button class="btn btn-sm btn-info"
-                        data-bs-toggle="modal"
-                        data-bs-target="#detailPesanan"
-                        v-on:click="p_idx = i">
-                        <i class="fas fa-clipboard"></i>
-                    </button>
-                    <button class="btn btn-sm btn-success" v-if="user.role == 'admin' && !p.accepted" v-on:click="terimaPesanan(p)">
-                        <i class="fas fa-check"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="text-center" v-else>
-            <tr>
-                <th colspan="5">Belum Ada Order</th>
-            </tr>
-        </tbody>
-    </table>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pesanan-masuk-tab" data-bs-toggle="tab" data-bs-target="#pesanan-masuk" type="button" role="tab" aria-controls="pesanan-masuk" aria-selected="true">Masuk</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pesanan-keluar-tab" data-bs-toggle="tab" data-bs-target="#pesanan-keluar" type="button" role="tab" aria-controls="pesanan-keluar" aria-selected="false">Selesai</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="pesanan-masuk" role="tabpanel" aria-labelledby="pesanan-masuk-tab">
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Sales</th>
+                        <th>Pelanggan</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody v-if="pesanan.length > 0">
+                    <tr v-for="(p, i) in pesanan">
+                        <td>${ get_date(p.tgl) }</td>
+                        <td>${ p.sales.nama }</td>
+                        <td>${ p.pelanggan.nama }</td>
+                        <td align="center">
+                            <span class="badge bg-success" v-if="p.accepted">Diterima</span>
+                            <span class="badge bg-secondary" v-else>Pending</span>
+                        </td>
+                        <td align="center">
+                            <button class="btn btn-sm btn-info"
+                                data-bs-toggle="modal"
+                                data-bs-target="#detailPesanan"
+                                v-on:click="getPesananDetail(i, 'in')">
+                                <i class="fas fa-clipboard"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" v-if="user.role == 'admin' && !p.accepted" v-on:click="terimaPesanan(p)">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody class="text-center" v-else>
+                    <tr>
+                        <th colspan="5">Belum Ada Pesanan</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="pesanan-keluar" role="tabpanel" aria-labelledby="pesanan-keluar-tab">
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Sales</th>
+                        <th>Pelanggan</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody v-if="pesanan_out.length > 0">
+                    <tr v-for="(p, i) in pesanan_out">
+                        <td>${ get_date(p.tgl) }</td>
+                        <td>${ p.sales.nama }</td>
+                        <td>${ p.pelanggan.nama }</td>
+                        <td align="center">
+                            <span class="badge bg-success" v-if="p.accepted">Diterima</span>
+                            <span class="badge bg-secondary" v-else>Pending</span>
+                        </td>
+                        <td align="center">
+                            <button class="btn btn-sm btn-info"
+                                data-bs-toggle="modal"
+                                data-bs-target="#detailPesanan"
+                                v-on:click="getPesananDetail(i, 'out')">
+                                <i class="fas fa-clipboard"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" v-if="user.role == 'admin' && !p.accepted" v-on:click="terimaPesanan(p)">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody class="text-center" v-else>
+                    <tr>
+                        <th colspan="5">Belum Ada Pesanan yang Selesai</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- MODAL DETAIL Pesanan -->
     <div class="modal fade"
@@ -64,7 +118,7 @@
             tabindex="-1"
             aria-labelledby="detailPesananLabel"
             aria-hidden="true"
-            v-if="pesanan.length > 0">
+            v-if="p_detail">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -79,25 +133,25 @@
                             <div class="col-md-6">
                                 <div class="form pt-2 pb-2">
                                     <label class="form-label" for="pelanggan">Tanggal</label>
-                                    <input type="text" class="form-control" v-bind:value="get_date(pesanan[p_idx].tgl)">
+                                    <input type="text" class="form-control" v-bind:value="get_date(p_detail.tgl)">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form pt-2 pb-2">
                                     <label class="form-label" for="pelanggan">Sales</label>
-                                    <input type="text" class="form-control" v-bind:value="pesanan[p_idx].sales.nama">
+                                    <input type="text" class="form-control" v-bind:value="p_detail.sales.nama">
                                 </div>
                             </div>
                         </div>
                         <div class="form pt-2 pb-2">
                             <label class="form-label" for="pelanggan">Pelanggan</label>
-                            <input type="text" class="form-control" v-bind:value="pesanan[p_idx].pelanggan.nama">
+                            <input type="text" class="form-control" v-bind:value="p_detail.pelanggan.nama">
                         </div>
 
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">Daftar Barang</h5>
-                            <div class="row" v-for="(ip, i) in pesanan[p_idx].item_pesanan">
+                            <div class="row" v-for="(ip, i) in p_detail.item_pesanan">
                                 <div class="col-md-10">
                                     <div class="form pt-2 pb-2">
                                       <label class="form-label" for="barang">Barang</label>
@@ -117,7 +171,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-success" v-if="user.role == 'admin' && !pesanan[p_idx].accepted" v-on:click="terimaPesanan(pesanan[p_idx])">Terima</button>
+                    <button type="button" class="btn btn-success" v-if="user.role == 'admin' && p_type == 'in'" v-on:click="terimaPesanan(p_detail)">Terima</button>
                 </div>
             </div>
         </div>
@@ -141,6 +195,9 @@
             },
             sales: {},
             pesanan: [],
+            pesanan_out: [],
+            p_detail: null,
+            p_type: 'in',
             p_idx: 0,
             pelanggan: [],
             pelanggan_id: 0,
@@ -148,10 +205,29 @@
         },
         created() {
             // fetch pesanan
-            getJsonData("/api/pesanan")
+            getJsonData("/api/pesanan?type=order")
                 .then(results => {
                     if (!results.detail) {
                         this.pesanan = results;
+                        if (this.pesanan) {
+                            this.p_detail = this.pesanan[0];
+                        }
+                        // console.log(results);
+                    } else {
+                        alert(results.detail);
+                    }
+                }).catch(err => {
+                    console.error('Error:', err);
+                });
+
+            // fetch pesanan out
+            getJsonData("/api/pesanan?type=accepted")
+                .then(results => {
+                    if (!results.detail) {
+                        this.pesanan_out = results;
+                        if (this.pesanan_out) {
+                            this.p_detail = this.pesanan_out[0];
+                        }
                         console.log(results);
                     } else {
                         alert(results.detail);
@@ -214,13 +290,14 @@
                                 return null;
                             }
 
-                            // update this.pesanan
+                            // update this.pesanan_out, remove this.pesanan
                             console.log(result);
                             this.pesanan.forEach((item, i) => {
                                 if (item.id == result.id) {
-                                    this.pesanan[i] = result;
+                                    this.pesanan.splice(i, 1);
                                 }
                             });
+                            this.pesanan_out.unshift(result);
                             this.$forceUpdate();
 
                             alert("Order diterima!");
@@ -237,6 +314,15 @@
                     }
                 });
                 return brname;
+            },
+            getPesananDetail: function (p_idx, p_type) {
+                this.p_idx = p_idx;
+                this.p_type = p_type;
+                if (p_type == 'in') {
+                    this.p_detail = this.pesanan[p_idx];
+                } else {
+                    this.p_detail = this.pesanan_out[p_idx];
+                }
             },
         },
         computed: {

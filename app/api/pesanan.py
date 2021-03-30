@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from typing import List
 from app import db_session
 from app.utils import oauth2_scheme, api_any_user, api_admin_only, get_current_user
-from app.models import PesananIn, ItemPesananIn, Sales
+from app.models import PesananIn, ItemPesananIn, PesananOut, ItemPesananOut, Sales
 from app.schemas import CreatePesanan, PesananInfo, ItemPesananInfo
 
 router = APIRouter(
@@ -101,6 +101,30 @@ async def accept_pesanan(
     pesanan.accepted = True
     db.commit()
     db.refresh(pesanan)
+
+    # create new PesananOut
+    print("Adding PesananOut")
+    pesanan_out = PesananOut(
+        tgl=pesanan.tgl,
+        sales_id=pesanan.sales_id,
+        pelanggan_id=pesanan.pelanggan_id,
+        accepted=pesanan.accepted
+    )
+    db.add(pesanan_out)
+    db.commit()
+    db.refresh(pesanan_out)
+
+    print("Adding ItemPesananOut")
+    for item in pesanan.item_pesanan:
+        new_item = ItemPesananOut(
+            qty=item.qty,
+            barang_id=item.barang_id,
+            pesanan_id=pesanan_out.id
+        )
+        db.add(new_item)
+        db.commit()
+    print("Done")
+
     return pesanan
 
 
