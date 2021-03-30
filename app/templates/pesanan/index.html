@@ -87,8 +87,7 @@
                         <td>${ p.sales.nama }</td>
                         <td>${ p.pelanggan.nama }</td>
                         <td align="center">
-                            <span class="badge bg-success" v-if="p.accepted">Diterima</span>
-                            <span class="badge bg-secondary" v-else>Pending</span>
+                            <span class="badge bg-success">Diterima</span>
                         </td>
                         <td align="center">
                             <button class="btn btn-sm btn-info"
@@ -96,9 +95,6 @@
                                 data-bs-target="#detailPesanan"
                                 v-on:click="getPesananDetail(i, 'out')">
                                 <i class="fas fa-clipboard"></i>
-                            </button>
-                            <button class="btn btn-sm btn-success" v-if="user.role == 'admin' && !p.accepted" v-on:click="terimaPesanan(p)">
-                                <i class="fas fa-check"></i>
                             </button>
                         </td>
                     </tr>

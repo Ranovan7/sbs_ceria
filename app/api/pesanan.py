@@ -25,24 +25,23 @@ async def index(
     user = Depends(get_current_user),
     db: Session = Depends(db_session)
 ) -> List[PesananInfo]:
-    query = db.query(PesananIn)
     if type == "order":
-        query = query.filter(
-                PesananIn.accepted == False
+        Pesanan = PesananIn
+        query = db.query(Pesanan).filter(
+                Pesanan.accepted == False,
             )
-    elif type == "accepted":
-        query = query.filter(
-                PesananIn.accepted == True
-            )
+    else:
+        Pesanan = PesananOut
+        query = db.query(Pesanan)
 
     if user.role_tag == "sales":
         sales = db.query(Sales).filter(Sales.user_id == user.id).first()
-        query = query.filter(
-                PesananIn.sales_id == sales.id
+        query.filter(
+                Pesanan.sales_id == sales.id
             )
 
     # query = query.offset(skip).limit(limit)
-    return query.order_by(PesananIn.tgl.desc()).all()
+    return query.order_by(Pesanan.tgl.desc()).all()
 
 
 @router.get("/{pesanan_id}",
