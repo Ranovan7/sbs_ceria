@@ -35,9 +35,10 @@ async def index(
         query = db.query(Pesanan)
 
     if user.role_tag == "sales":
+        print("Filter by Sales")
         sales = db.query(Sales).filter(Sales.user_id == user.id).first()
-        query.filter(
-                Pesanan.sales_id == sales.id
+        query = query.filter_by(
+                sales_id = sales.id
             )
 
     # query = query.offset(skip).limit(limit)
